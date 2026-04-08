@@ -86,6 +86,10 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
         const data = new FormData();
         data.append('file', file);
         const res = await fetch('/api/upload', { method: 'POST', body: data });
+        if (!res.ok) {
+           const errText = await res.text();
+           throw new Error(errText || res.statusText);
+        }
         const { url } = await res.json();
         return url;
       });
@@ -97,8 +101,8 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
         setFormData(prev => ({ ...prev, images: [...prev.images, ...validUrls] }));
         setIsDirty(true);
       }
-    } catch (err) {
-      toast.error("Upload failed.", { description: "Ensure Cloudinary is configured." });
+    } catch (err: any) {
+      toast.error("Upload failed.", { description: err.message || "Ensure Cloudinary is configured." });
     } finally {
       setLoading(false);
     }
