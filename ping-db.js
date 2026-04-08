@@ -1,0 +1,1 @@
+const { PrismaClient } = require('@prisma/client'); const prisma = new PrismaClient(); async function main() { console.log('Checking database...'); try { await prisma.product.count(); console.log('SUCCESS! Database is accepting connections again!'); } catch(e) { console.error('Still locked...'); } finally { await prisma.$disconnect(); } } main();
