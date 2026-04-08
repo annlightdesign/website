@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id              Int      @id @default(autoincrement())
+  title           String
+  titleHe         String?
+  description     String   @db.Text
+  images          Json     // Array of Cloudinary URLs
+  specifications  Json     // Flexible JSON object for user-defined attributes
+  categoryId      Int
+  category        Category @relation(fields: [categoryId], references: [id])
+  brandId         Int?
+  brand           Brand?   @relation(fields: [brandId], references: [id])
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  name      String
+  parentId  Int?
+  parent    Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  children  Category[] @relation("SubCategories")
+  products  Product[]
+}
+
+model Brand {
+  id       Int       @id @default(autoincrement())
+  name     String
+  logoUrl  String?
+  products Product[]
+}
+
+model Project {
+  id                 Int      @id @default(autoincrement())
+  title              String
+  titleHe            String?
+  images             Json     // High-res architectural shots
+  architect          String?
+  photographer       String?
+  lightingConsultant String?
+  location           String?
+  order              Int      @default(0)
+  createdAt          DateTime @default(now())
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  password    String   // Hashed password
+  role        String   @default("ADMIN") // Configurable role
+  permissions Json     @default("[]")
+  createdAt   DateTime @default(now())
+}
+
+model SiteSetting {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
+model ArchitectLead {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  email     String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

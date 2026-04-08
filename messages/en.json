@@ -1,0 +1,59 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "projects": "Projects",
+    "brands": "Brands",
+    "architects": "Architects",
+    "contact": "Contact Us",
+    "admin": "Admin"
+  },
+  "Hero": {
+    "title": "Ann Light",
+    "subtitle": "Much more than lighting"
+  },
+  "Contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with us for inquiries and support.",
+    "address_label": "Address",
+    "address": "Alkuds 44, Baqa Al-Gharbiyya",
+    "waze_button": "WAZE",
+    "phone_label": "Phone",
+    "phone": "053-660-3033",
+    "email_label": "Email",
+    "email": "ann.light.design@gmail.com",
+    "hours_label": "Working Days",
+    "hours": "All week 10:00 - 18:00 (Closed on Fridays)",
+    "service_label": "Customer Service",
+    "service_hours": "11:00 - 17:00",
+    "get_in_touch": "Get In Touch"
+  },
+  "Projects": {
+    "title": "Selected Projects",
+    "subtitle": "A curated collection of lighting environments.",
+    "architect": "Architect",
+    "photographer": "Photographer",
+    "lightingConsultant": "Lighting Design",
+    "location": "Location",
+    "about": "About the Project",
+    "contactCta": "For lighting consultation",
+    "contactBtn": "Contact Us",
+    "previous": "Previous Project",
+    "next": "Next Project",
+    "back": "Back to Projects",
+    "viewProject": "View Project"
+  },
+  "Architects": {
+    "title": "Architects Relations",
+    "p1": "At Ann Light, we collaborate with architects and designers as true partners.",
+    "p2": "We create precise lighting solutions that elevate space and material.",
+    "p3": "From concept to execution, fully aligned with your vision.",
+    "p4": "We invite you to a professional and creative collaboration.",
+    "formTitle": "To join our database of architects and designers",
+    "emailPlaceholder": "Enter Email",
+    "phonePlaceholder": "Enter Phone (Required)",
+    "namePlaceholder": "Full Name (Required)",
+    "privacyPolicy": "Sending the details confirms the website's privacy policy",
+    "sendRequest": "Send Request"
+  }
+}
