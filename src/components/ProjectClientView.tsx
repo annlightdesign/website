@@ -38,7 +38,7 @@ export default function ProjectClientView({
   }, [activeIndex, handleKeyDown]);
 
   return (
-    <div className="w-full bg-background text-foreground flex flex-col md:flex-row">
+    <div className="w-full pt-[80px] md:pt-0 bg-background text-foreground flex flex-col md:flex-row">
 
       {/* Left Column (Sticky Edge-to-Edge Image) */}
       <motion.div

@@ -25,6 +25,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (project.architect) description += ` Architect: ${project.architect}.`;
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://annlight.co.il';
+  
+  let ogImage = mainImage;
+  if (ogImage.includes('cloudinary.com') && ogImage.includes('/upload/')) {
+    ogImage = ogImage.replace('/upload/', '/upload/c_scale,w_1200,q_auto/');
+  } else if (!ogImage.startsWith('http')) {
+    ogImage = `${baseUrl}${ogImage}`;
+  }
 
   return {
     title,
@@ -36,7 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       type: 'article',
       images: [
         {
-          url: mainImage,
+          url: ogImage,
           width: 1200,
           height: 630,
           alt: title,
@@ -47,7 +54,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       card: 'summary_large_image',
       title: `${title} | Ann Light`,
       description,
-      images: [mainImage],
+      images: [ogImage],
     }
   };
 }
@@ -78,11 +85,18 @@ export default async function SingleProjectPage({ params }: { params: Promise<{ 
   const title = locale === 'he' && project.titleHe ? project.titleHe : project.title;
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://annlight.co.il';
 
+  let schemaImage = mainImage;
+  if (schemaImage.includes('cloudinary.com') && schemaImage.includes('/upload/')) {
+    schemaImage = schemaImage.replace('/upload/', '/upload/c_scale,w_1200,q_auto/');
+  } else if (!schemaImage.startsWith('http')) {
+    schemaImage = `${baseUrl}${schemaImage}`;
+  }
+
   const projectSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
-    image: [mainImage],
+    image: [schemaImage],
     author: {
       '@type': 'Organization',
       name: 'Ann Light',
