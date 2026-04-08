@@ -14,58 +14,39 @@ import '../globals.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://annlight.co.il';
 
-export async function generateMetadata(): Promise<Metadata> {
-  let defaultOgImage = '/favicon.ico';
-  
-  try {
-    const setting = await prisma.siteSetting.findUnique({ where: { key: 'homepage_wallpaper' }});
-    if (setting?.value) {
-      // Compress the wallpaper specifically for WhatsApp requirements
-      let ogImage = setting.value;
-      if (ogImage.includes('cloudinary.com') && ogImage.includes('/upload/')) {
-        defaultOgImage = ogImage.replace('/upload/', '/upload/c_scale,w_1200,q_auto/');
-      } else if (ogImage.startsWith('http')) {
-        defaultOgImage = ogImage;
-      } else {
-        defaultOgImage = `${baseUrl}${ogImage}`;
-      }
-    }
-  } catch(e) {}
-
-  return {
-    metadataBase: new URL(baseUrl),
-    title: {
-      default: 'Ann Light',
-      template: '%s | Ann Light'
-    },
+export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: 'Ann Light',
+    template: '%s | Ann Light'
+  },
+  description: 'Much more than lighting. Architectural lighting and design studio.',
+  openGraph: {
+    title: 'Ann Light',
     description: 'Much more than lighting. Architectural lighting and design studio.',
-    openGraph: {
-      title: 'Ann Light',
-      description: 'Much more than lighting. Architectural lighting and design studio.',
-      url: baseUrl,
-      siteName: 'Ann Light',
-      images: [
-        {
-          url: defaultOgImage,
-          width: 1200,
-          height: 630,
-          alt: 'Ann Light Architectural Design'
-        }
-      ],
-      locale: 'he_IL',
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Ann Light',
-      description: 'Much more than lighting. Architectural lighting and design studio.',
-      images: [defaultOgImage],
-    },
-    alternates: {
-      canonical: baseUrl,
-    }
-  };
-}
+    url: baseUrl,
+    siteName: 'Ann Light',
+    images: [
+      {
+        url: '/favicon.ico',
+        width: 1200,
+        height: 630,
+        alt: 'Ann Light default sharing image'
+      }
+    ],
+    locale: 'he_IL',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Ann Light',
+    description: 'Much more than lighting. Architectural lighting and design studio.',
+    images: ['/favicon.ico'],
+  },
+  alternates: {
+    canonical: baseUrl,
+  }
+};
 
 export default async function LocaleLayout(
   props: {

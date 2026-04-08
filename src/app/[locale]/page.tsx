@@ -11,6 +11,43 @@ import HomeSecond from '@/components/HomeSecond';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+export async function generateMetadata(): Promise<import('next').Metadata> {
+  let defaultOgImage = '/favicon.ico';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://annlight.co.il';
+  
+  try {
+    const setting = await prisma.siteSetting.findUnique({ where: { key: 'homepage_wallpaper' }});
+    if (setting?.value) {
+      let ogImage = setting.value;
+      if (ogImage.includes('cloudinary.com') && ogImage.includes('/upload/')) {
+        defaultOgImage = ogImage.replace('/upload/', '/upload/c_scale,w_1200,q_auto/');
+      } else if (ogImage.startsWith('http')) {
+        defaultOgImage = ogImage;
+      } else {
+        defaultOgImage = `${baseUrl}${ogImage}`;
+      }
+    }
+  } catch(e) {}
+
+  return {
+    openGraph: {
+      title: 'Ann Light',
+      description: 'Much more than lighting. Architectural lighting and design studio.',
+      url: baseUrl,
+      siteName: 'Ann Light',
+      images: [ { url: defaultOgImage, width: 1200, height: 630, alt: 'Ann Light' } ],
+      locale: 'he_IL',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Ann Light',
+      description: 'Much more than lighting. Architectural lighting and design studio.',
+      images: [defaultOgImage],
+    }
+  };
+}
+
 const tinosFont = Tinos({ weight: ['400', '700'], subsets: ['hebrew', 'latin'] });
 const playfairFont = Playfair_Display({ weight: ['400', '700'], subsets: ['latin'] });
 const assistantFont = Assistant({ weight: ['200', '300', '400'], subsets: ['hebrew', 'latin'] });
