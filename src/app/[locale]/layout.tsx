@@ -62,14 +62,18 @@ export default async function LocaleLayout(
 
   const messages = await getMessages();
 
-  // Load Settings from Database to pass directly into Layout
-  const siteSettings = await prisma.siteSetting.findMany({
-    where: { OR: [{ key: { startsWith: 'anti_theft_' } }, { key: { startsWith: 'typography_' } }] }
-  });
-  const securityConfig = siteSettings.reduce((acc: Record<string, string>, curr) => {
-    acc[curr.key] = curr.value;
-    return acc;
-  }, {});
+  let securityConfig: Record<string, string> = {};
+  try {
+    const siteSettings = await prisma.siteSetting.findMany({
+      where: { OR: [{ key: { startsWith: 'anti_theft_' } }, { key: { startsWith: 'typography_' } }] }
+    });
+    securityConfig = siteSettings.reduce((acc: Record<string, string>, curr) => {
+      acc[curr.key] = curr.value;
+      return acc;
+    }, {});
+  } catch (e: any) {
+    console.error("Layout Prisma Error:", e?.message);
+  }
 
   const isEnabled = securityConfig['anti_theft_enabled'] !== 'false';
   const blockRC = securityConfig['anti_theft_right_click'] !== 'false';
