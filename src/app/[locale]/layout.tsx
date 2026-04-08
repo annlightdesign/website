@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   let defaultOgImage = '/favicon.ico';
   
   try {
-    const setting = await prisma.siteSetting.findUnique({ where: { key: 'hero_wallpaper' }});
+    const setting = await prisma.siteSetting.findUnique({ where: { key: 'homepage_wallpaper' }});
     if (setting?.value) {
       // Compress the wallpaper specifically for WhatsApp requirements
       let ogImage = setting.value;
