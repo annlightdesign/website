@@ -89,7 +89,15 @@ export default async function VisitorsPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-muted-foreground" />
-                        {v.city !== 'Unknown' ? `${v.city}, ` : ''}{v.country}
+                        {(() => {
+                           const safeDecode = (str: string | null) => {
+                             if (!str) return 'Unknown';
+                             try { return decodeURIComponent(str); } catch { return str; }
+                           };
+                           const cityStr = safeDecode(v.city);
+                           const countryStr = safeDecode(v.country);
+                           return `${cityStr !== 'Unknown' ? `${cityStr}, ` : ''}${countryStr}`;
+                        })()}
                       </div>
                     </td>
                     <td className="px-6 py-4 font-mono text-xs truncate max-w-[200px]" title={v.path || '/'}>

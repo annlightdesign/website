@@ -12,8 +12,12 @@ export async function POST(req: NextRequest) {
     // Vercel populates these headers on edge deployments
     const ipStr = req.headers.get('x-forwarded-for');
     const ip = ipStr ? ipStr.split(',')[0] : 'Unknown';
-    const country = req.headers.get('x-vercel-ip-country') || 'Unknown';
-    const city = req.headers.get('x-vercel-ip-city') || 'Unknown';
+    const safeDecode = (str: string | null) => {
+      if (!str) return 'Unknown';
+      try { return decodeURIComponent(str); } catch { return str; }
+    };
+    const country = safeDecode(req.headers.get('x-vercel-ip-country'));
+    const city = safeDecode(req.headers.get('x-vercel-ip-city'));
     
     // Basic rate limit or session tracking (optional)
     // To prevent spam, we can check if this IP visited this exact path in the last 15 minutes.
