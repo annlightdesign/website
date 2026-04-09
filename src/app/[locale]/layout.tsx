@@ -10,6 +10,7 @@ import TypographyGuardian from '@/components/TypographyGuardian';
 import ToasterWrapper from '@/components/ToasterWrapper';
 import FooterWrapper from '@/components/FooterWrapper';
 import SchemaOrg from '@/components/SchemaOrg';
+import VisitorTracker from '@/components/VisitorTracker';
 import '../globals.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://annlight.co.il';
@@ -28,10 +29,10 @@ export const metadata: Metadata = {
     siteName: 'Ann Light',
     images: [
       {
-        url: '/favicon.ico',
-        width: 1200,
-        height: 630,
-        alt: 'Ann Light default sharing image'
+        url: '/icon.png',
+        width: 935,
+        height: 935,
+        alt: 'Ann Light Logo'
       }
     ],
     locale: 'he_IL',
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Ann Light',
     description: 'Much more than lighting. Architectural lighting and design studio.',
-    images: ['/favicon.ico'],
+    images: ['/icon.png'],
   },
   alternates: {
     canonical: baseUrl,
@@ -96,7 +97,7 @@ export default async function LocaleLayout(
     '@type': 'Organization',
     name: 'Ann Light',
     url: baseUrl,
-    logo: `${baseUrl}/favicon.ico`,
+    logo: `${baseUrl}/icon.png`,
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: '050-602-2220',
@@ -124,6 +125,7 @@ export default async function LocaleLayout(
       <body className="antialiased min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>
           <SchemaOrg schema={organizationSchema} />
+          <VisitorTracker />
           <TypographyGuardian 
             enabled={typeEnabled}
             protectHome={typeProtectHome}

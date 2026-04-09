@@ -75,3 +75,15 @@ model ArchitectLead {
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+
+model VisitorLog {
+  id        Int      @id @default(autoincrement())
+  ip        String?
+  country   String?
+  city      String?
+  browser   String?
+  os        String?
+  device    String?
+  path      String?
+  createdAt DateTime @default(now())
+}

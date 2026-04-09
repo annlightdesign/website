@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Users, FileImage, FolderKanban, Settings, LogOut, Shield, Type } from "lucide-react";
+import { LayoutDashboard, Users, FileImage, FolderKanban, Settings, LogOut, Shield, Type, Activity } from "lucide-react";
 import { useState } from "react";
 import ConfirmModal from "@/components/ConfirmModal";
 
@@ -21,6 +21,7 @@ export default function AdminSidebar({
 
   const menuItemsRaw = [
     { name: "Overview", href: "/admin", icon: LayoutDashboard, perm: "overview" },
+    { name: "Visitors", href: "/admin/visitors", icon: Activity, perm: "visitors" },
     { name: "Architect Leads", href: "/admin/leads", icon: Users, perm: "leads" },
     { name: "Projects", href: "/admin/projects", icon: FolderKanban, perm: "projects" },
     { name: "Products", href: "/admin/products", icon: FileImage, perm: "products" },

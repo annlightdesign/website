@@ -44,13 +44,17 @@ export default function Footer() {
       <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-12 gap-5 md:gap-0">
         
         {/* Left / Center-Left: Logo Mark & Copyright */}
-        <div className="flex items-center gap-3 md:gap-4">
+        <div className="flex items-center gap-3 md:gap-4 flex-wrap">
           <span className="font-light tracking-[0.25em] uppercase text-white/90 text-[13px] md:text-sm">
             Ann
           </span>
           <span className="text-white/50 text-[10px] md:text-[11px] font-light tracking-[0.1em] border-l border-white/[0.08] pl-3 md:pl-4 py-0.5 uppercase">
             © 2026 Ann Light Design. All rights reserved.
           </span>
+          <span className="hidden md:inline text-white/20">•</span>
+          <a href="/privacy" className="text-white/50 hover:text-white/80 text-[10px] md:text-[11px] font-light tracking-[0.1em] uppercase transition-colors">
+            Privacy Policy
+          </a>
         </div>
 
         {/* Right: Floating Social Icons */}
