@@ -7,8 +7,10 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   let unreadLeadsCount = 0;
+  let unreadVisitsCount = 0;
   try {
     unreadLeadsCount = await prisma.architectLead.count({ where: { isRead: false } });
+    unreadVisitsCount = await prisma.visitorLog.count({ where: { isRead: false } });
   } catch (e) { }
 
   const cookieStore = await cookies();
@@ -40,7 +42,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex min-h-screen bg-background relative z-10 w-full pt-20">
-      <AdminSidebar unreadLeadsCount={unreadLeadsCount} role={userRole} permissions={userPermissions} />
+      <AdminSidebar unreadLeadsCount={unreadLeadsCount} unreadVisitsCount={unreadVisitsCount} role={userRole} permissions={userPermissions} />
       <main className="flex-1 w-full relative overflow-y-auto">
         {children}
       </main>

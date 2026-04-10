@@ -44,6 +44,14 @@ export const metadata: Metadata = {
     description: 'Much more than lighting. Architectural lighting and design studio.',
     images: ['/icon.png'],
   },
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png' }
+    ],
+    apple: [
+      { url: '/icon.png' }
+    ]
+  },
   alternates: {
     canonical: baseUrl,
   }

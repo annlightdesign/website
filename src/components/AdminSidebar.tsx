@@ -8,10 +8,12 @@ import ConfirmModal from "@/components/ConfirmModal";
 
 export default function AdminSidebar({ 
   unreadLeadsCount = 0,
+  unreadVisitsCount = 0,
   role = "ADMIN",
   permissions = []
 }: { 
   unreadLeadsCount?: number;
+  unreadVisitsCount?: number;
   role?: string;
   permissions?: string[];
 }) {
@@ -85,6 +87,11 @@ export default function AdminSidebar({
                 {item.name === "Architect Leads" && unreadLeadsCount > 0 && (
                   <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm animate-pulse">
                     {unreadLeadsCount}
+                  </span>
+                )}
+                {item.name === "Visitors" && unreadVisitsCount > 0 && (
+                  <span className="bg-muted-foreground/30 text-foreground text-[10px] font-bold px-2 py-0.5 rounded-sm">
+                    New
                   </span>
                 )}
               </Link>

@@ -14,6 +14,12 @@ export default async function VisitorsPage() {
       orderBy: { createdAt: 'desc' },
       take: 1000 // Just load last 1000 for performance/memory
     });
+
+    // Mark all unread ones as read when this page is visited
+    await prisma.visitorLog.updateMany({
+      where: { isRead: false },
+      data: { isRead: true }
+    });
   } catch (e) {
     console.error("Error loading visitors:", e);
   }
@@ -81,10 +87,13 @@ export default async function VisitorsPage() {
                   </td>
                 </tr>
               ) : (
-                visitors.map((v) => (
-                  <tr key={v.id} className="border-b border-border/30 hover:bg-muted/20 transition-colors">
+                visitors.map((v, i) => (
+                  <tr key={v.id} className={`border-b border-border/30 transition-colors ${!v.isRead ? 'bg-muted/40 hover:bg-muted/50' : 'hover:bg-muted/20'}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(v.createdAt))}
+                      <div className="flex items-center gap-2">
+                        {!v.isRead && <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>}
+                        {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(v.createdAt))}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
