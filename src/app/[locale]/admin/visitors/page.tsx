@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 
 import { BarChart, Monitor, Smartphone, Globe, MapPin, Search } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import ClearVisitorsButton from './ClearVisitorsButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,6 +42,9 @@ export default async function VisitorsPage() {
           <p className="text-muted-foreground mt-2 max-w-2xl">
             Monitor real-time site traffic, device details, and geographic locations (Legal IP tracking).
           </p>
+        </div>
+        <div className="flex-shrink-0 z-50">
+          <ClearVisitorsButton />
         </div>
       </div>
 
@@ -88,7 +92,7 @@ export default async function VisitorsPage() {
                 </tr>
               ) : (
                 visitors.map((v, i) => (
-                  <tr key={v.id} className={`border-b border-border/30 transition-colors ${!v.isRead ? 'bg-muted/40 hover:bg-muted/50' : 'hover:bg-muted/20'}`}>
+                  <tr key={v.id} className={`border-b border-border/30 transition-colors ${!v.isRead ? 'bg-blue-500/5 hover:bg-blue-500/10 border-l-2 border-l-blue-500' : 'hover:bg-muted/20 border-l-2 border-l-transparent'}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         {!v.isRead && <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>}
