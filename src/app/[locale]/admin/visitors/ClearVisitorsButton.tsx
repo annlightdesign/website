@@ -10,7 +10,6 @@ export default function ClearVisitorsButton() {
   const router = useRouter();
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const router = useRouter();
 
   const executeClear = async () => {
     setIsConfirmOpen(false);
