@@ -15,6 +15,9 @@ interface AdminCategoryAccordionProps {
   count: number;
   products: Product[];
   defaultOpen?: boolean;
+  dragAttributes?: any;
+  dragListeners?: any;
+  isDragging?: boolean;
 }
 
 export default function AdminCategoryAccordion({
@@ -23,6 +26,9 @@ export default function AdminCategoryAccordion({
   count,
   products,
   defaultOpen = false,
+  dragAttributes,
+  dragListeners,
+  isDragging = false,
 }: AdminCategoryAccordionProps) {
   const storageKey = `annlight_admin_accordion_${title}`;
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -93,14 +99,23 @@ export default function AdminCategoryAccordion({
   }
 
   return (
-    <div className={`mb-4 bg-background border border-border/40 shadow-sm relative ${isMenuOpen ? 'z-50' : 'z-10'}`}>
+    <div className={`bg-background border shadow-sm relative ${isMenuOpen ? 'z-50' : 'z-10'} ${isDragging ? 'border-primary shadow-xl opacity-90' : 'border-border/40'}`}>
       {/* Header */}
       <div
         onClick={toggleAccordion}
         className="flex items-center justify-between p-4 bg-muted/20 hover:bg-muted/40 cursor-pointer transition-colors"
       >
         <div className="flex items-center gap-4 text-foreground/90">
-          <AlignJustify className="w-5 h-5 text-muted-foreground" strokeWidth={1.5} />
+          <div 
+            {...dragAttributes} 
+            {...dragListeners}
+            data-dnd-type="category-handle"
+            className={`cursor-grab active:cursor-grabbing p-1 -ml-1 ${dragAttributes ? 'hover:text-foreground text-muted-foreground' : 'text-muted-foreground/30'}`}
+            onClick={(e) => dragAttributes && e.stopPropagation()}
+            title={dragAttributes ? "Drag to reorder category" : undefined}
+          >
+            <AlignJustify className="w-5 h-5" strokeWidth={1.5} />
+          </div>
           <h2 className="text-[15px] font-medium tracking-wider uppercase flex items-center gap-2">
             <span>{category?.name || title}</span>
             {category?.nameHe && <span className="text-muted-foreground ml-1 dir-rtl opacity-75">/ {category.nameHe}</span>}

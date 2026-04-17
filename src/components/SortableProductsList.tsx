@@ -57,6 +57,7 @@ function SortableProductItem({ product, categoryId }: SortableProductItemProps) 
         <div 
           {...attributes} 
           {...listeners}
+          data-dnd-type="product-handle"
           className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground transition-colors p-1 flex-shrink-0"
           title="Drag to reorder"
         >

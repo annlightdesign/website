@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import ProductForm from '@/components/ProductForm';
 import CategoryForm from '@/components/CategoryForm';
-import AdminCategoryAccordion from '@/components/AdminCategoryAccordion';
+import SortableCategoriesList from '@/components/SortableCategoriesList';
 import { ArrowLeft } from 'lucide-react';
 
 export default async function AdminProductsPage() {
@@ -9,7 +9,9 @@ export default async function AdminProductsPage() {
     include: { categories: true },
     orderBy: [{ order: 'asc' }, { createdAt: 'desc' }] 
   });
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    orderBy: [{ order: 'asc' }, { id: 'asc' }]
+  });
 
   // Group products by category
   const productsByCategory = categories.map(cat => ({
@@ -31,25 +33,15 @@ export default async function AdminProductsPage() {
       </div>
 
       <div className="mt-10 space-y-2">
-        {productsByCategory.map(({ category, products }) => (
-          <AdminCategoryAccordion 
-            key={category.id} 
-            category={category}
-            title={category.name} 
-            count={products.length}
-            products={products}
-            defaultOpen={products.length > 0}
-          />
-        ))}
-
-        {uncategorizedProducts.length > 0 && (
-          <AdminCategoryAccordion 
-            title="Uncategorized" 
-            count={uncategorizedProducts.length}
-            products={uncategorizedProducts}
-            defaultOpen={true}
-          />
-        )}
+        <SortableCategoriesList 
+          initialCategories={[
+            ...productsByCategory,
+            ...(uncategorizedProducts.length > 0 ? [{
+              category: null,
+              products: uncategorizedProducts
+            }] : [])
+          ]}
+        />
       </div>
 
     </div>
