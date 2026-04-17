@@ -109,7 +109,8 @@ export default function AdminCategoryAccordion({
         </div>
         <div className="flex flex-row items-center gap-1">
           {category && (
-             <div className="relative" ref={menuRef} onClick={(e) => e.stopPropagation()}>
+            <>
+              <div className="relative" ref={menuRef} onClick={(e) => e.stopPropagation()}>
                 <button 
                   onClick={() => setIsMenuOpen(!isMenuOpen)} 
                   className="p-1.5 hover:bg-border/50 transition-colors mr-2 cursor-pointer text-muted-foreground focus:outline-none"
@@ -144,13 +145,14 @@ export default function AdminCategoryAccordion({
                     </motion.div>
                   )}
                 </AnimatePresence>
-             </div>
-             <CategoryForm 
-                 existingCategory={category} 
-                 trigger={null}
-                 externalOpen={isEditModalOpen}
-                 onExternalClose={() => setIsEditModalOpen(false)}
-             />
+              </div>
+              <CategoryForm 
+                  existingCategory={category} 
+                  trigger={null}
+                  externalOpen={isEditModalOpen}
+                  onExternalClose={() => setIsEditModalOpen(false)}
+              />
+            </>
           )}
           <div className="text-muted-foreground flex items-center justify-center p-1">
             {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
