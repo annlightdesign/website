@@ -33,6 +33,7 @@ export default async function AdminProductsPage() {
         {productsByCategory.map(({ category, products }) => (
           <AdminCategoryAccordion 
             key={category.id} 
+            category={category}
             title={category.name} 
             count={products.length}
             products={products}
