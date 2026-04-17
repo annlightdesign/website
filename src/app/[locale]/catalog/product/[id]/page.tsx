@@ -26,7 +26,7 @@ export default async function ProductPage(props: { params: Promise<{ id: string,
   
   const product = await prisma.product.findUnique({
     where: { id: parseInt(id) },
-    include: { category: true, brand: true }
+    include: { categories: true, brand: true }
   });
   console.log("ProductPage product found:", product?.id);
 
@@ -62,7 +62,7 @@ export default async function ProductPage(props: { params: Promise<{ id: string,
         <div className="flex-1 flex flex-col justify-center">
            <div className={`mb-8 border-b border-border pb-8`}>
              <h3 className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-3">
-               {product.category?.name ? translateCategory(product.category.name, locale) : (locale === 'he' ? 'ללא קטגוריה' : 'Uncategorized')}
+               {product.categories && product.categories.length > 0 ? product.categories.map(c => translateCategory(c.name, locale)).join(', ') : (locale === 'he' ? 'ללא קטגוריה' : 'Uncategorized')}
              </h3>
              <h1 className="text-3xl md:text-5xl font-light uppercase tracking-widest mb-6 leading-tight" dir="auto">
                {locale === 'he' && product.titleHe ? product.titleHe : product.title}

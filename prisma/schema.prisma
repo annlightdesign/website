@@ -14,8 +14,7 @@ model Product {
   description     String   @db.Text
   images          Json     // Array of Cloudinary URLs
   specifications  Json     // Flexible JSON object for user-defined attributes
-  categoryId      Int
-  category        Category @relation(fields: [categoryId], references: [id])
+  categories      Category[] @relation("ProductCategories")
   brandId         Int?
   brand           Brand?   @relation(fields: [brandId], references: [id])
   order           Int      @default(0)
@@ -30,7 +29,7 @@ model Category {
   parentId  Int?
   parent    Category?  @relation("SubCategories", fields: [parentId], references: [id])
   children  Category[] @relation("SubCategories")
-  products  Product[]
+  products  Product[]  @relation("ProductCategories")
 }
 
 model Brand {

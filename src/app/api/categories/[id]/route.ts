@@ -33,7 +33,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     
     // Check if category has products
     const productCount = await prisma.product.count({
-      where: { categoryId: id }
+      where: { categories: { some: { id: id } } }
     });
 
     if (productCount > 0) {

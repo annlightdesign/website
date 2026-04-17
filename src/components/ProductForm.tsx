@@ -23,11 +23,17 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
   const [showJson, setShowJson] = useState(false);
   const [rawJson, setRawJson] = useState(JSON.stringify(defaultSpecs, null, 2));
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    titleHe: string;
+    description: string;
+    categoryIds: string[];
+    images: string[];
+  }>({
     title: existingProduct?.title || '',
     titleHe: existingProduct?.titleHe || '',
     description: existingProduct?.description || '',
-    categoryId: existingProduct?.categoryId?.toString() || '',
+    categoryIds: existingProduct?.categories?.map((c: any) => c.id.toString()) || [],
     images: (existingProduct?.images as string[]) || []
   });
 
@@ -58,8 +64,9 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
     fetch('/api/categories').then(res => res.json()).then(data => {
       if (data.success) {
          setCategories(data.categories);
-         if (!existingProduct?.categoryId && data.categories.length > 0) {
-            setFormData(prev => ({ ...prev, categoryId: data.categories[0].id.toString() }));
+         if (!existingProduct?.categories?.length && data.categories.length > 0 && formData.categoryIds.length === 0) {
+            // Auto-select the first category if none is selected
+            setFormData(prev => ({ ...prev, categoryIds: [data.categories[0].id.toString()] }));
          }
       }
     }).catch(() => {});
@@ -238,13 +245,39 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
                 />
               </div>
 
-              <div className="flex flex-col gap-2 border-t border-border pt-4">
-                <label className="text-xs uppercase tracking-widest font-semibold text-muted-foreground">Category</label>
-                <select required value={formData.categoryId} onChange={e=>{setFormData({...formData, categoryId: e.target.value}); setIsDirty(true);}} className="border p-3 outline-none bg-background cursor-pointer">
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                  ))}
-                </select>
+              <div className="flex flex-col gap-3 border-t border-border pt-4">
+                <label className="text-xs uppercase tracking-widest font-semibold text-muted-foreground">Catalogs</label>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map(cat => {
+                    const isSelected = formData.categoryIds.includes(cat.id.toString());
+                    return (
+                      <label 
+                        key={cat.id} 
+                        className={`cursor-pointer border px-3 py-2 text-xs font-medium uppercase tracking-wider transition-colors ${isSelected ? 'border-foreground bg-foreground text-background' : 'border-border bg-background text-muted-foreground hover:border-muted-foreground'}`}
+                      >
+                        <input 
+                          type="checkbox" 
+                          className="hidden"
+                          checked={isSelected}
+                          onChange={(e) => {
+                            let newIds = [...formData.categoryIds];
+                            if (e.target.checked) {
+                              newIds.push(cat.id.toString());
+                            } else {
+                              newIds = newIds.filter(id => id !== cat.id.toString());
+                            }
+                            setFormData({ ...formData, categoryIds: newIds });
+                            setIsDirty(true);
+                          }} 
+                        />
+                        {cat.name}
+                      </label>
+                    );
+                  })}
+                </div>
+                {formData.categoryIds.length === 0 && (
+                  <span className="text-xs text-red-500 mt-1">Please select at least one catalog.</span>
+                )}
               </div>
 
               <div className="flex flex-col gap-4 border-t border-border pt-4">
@@ -361,7 +394,7 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
                 )}
               </div>
 
-              <button disabled={loading} type="submit" className="bg-accent text-accent-foreground p-4 mt-2 uppercase font-medium tracking-widest w-full font-sans transition-opacity hover:opacity-90">
+              <button disabled={loading || formData.categoryIds.length === 0} type="submit" className="bg-accent text-accent-foreground p-4 mt-2 uppercase font-medium tracking-widest w-full font-sans transition-opacity hover:opacity-90 disabled:opacity-50">
                 {loading ? "Processing..." : "Publish to Database"}
               </button>
             </form>

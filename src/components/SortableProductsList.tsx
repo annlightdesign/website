@@ -26,9 +26,10 @@ import { useRouter } from 'next/navigation';
 
 interface SortableProductItemProps {
   product: Product;
+  categoryId?: number;
 }
 
-function SortableProductItem({ product }: SortableProductItemProps) {
+function SortableProductItem({ product, categoryId }: SortableProductItemProps) {
   const {
     attributes,
     listeners,
@@ -70,7 +71,7 @@ function SortableProductItem({ product }: SortableProductItemProps) {
       </div>
       <div className="flex items-center gap-6">
         <ProductForm existingProduct={product as any} />
-        <AdminListActions type="product" id={product.id} categoryId={product.categoryId} />
+        <AdminListActions type="product" id={product.id} categoryId={categoryId} />
       </div>
     </div>
   );
@@ -78,9 +79,10 @@ function SortableProductItem({ product }: SortableProductItemProps) {
 
 interface SortableProductsListProps {
   initialProducts: Product[];
+  categoryId?: number;
 }
 
-export default function SortableProductsList({ initialProducts }: SortableProductsListProps) {
+export default function SortableProductsList({ initialProducts, categoryId }: SortableProductsListProps) {
   const [products, setProducts] = useState(initialProducts);
   const router = useRouter();
 
@@ -140,7 +142,7 @@ export default function SortableProductsList({ initialProducts }: SortableProduc
           strategy={verticalListSortingStrategy}
         >
           {products.map(p => (
-            <SortableProductItem key={p.id} product={p} />
+            <SortableProductItem key={p.id} product={p} categoryId={categoryId} />
           ))}
         </SortableContext>
         {products.length === 0 && (

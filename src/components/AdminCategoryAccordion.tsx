@@ -169,7 +169,7 @@ export default function AdminCategoryAccordion({
             className="overflow-hidden bg-background"
           >
             <div className="p-4 border-t border-border/20">
-              <SortableProductsList initialProducts={products} />
+              <SortableProductsList initialProducts={products} categoryId={category?.id} />
             </div>
           </motion.div>
         )}

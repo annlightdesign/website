@@ -14,7 +14,9 @@ export async function POST(req: NextRequest) {
         description: data.description,
         images: data.images || [], 
         specifications: data.specifications || {}, 
-        categoryId: parseInt(data.categoryId),
+        categories: {
+          connect: data.categoryIds.map((id: string) => ({ id: parseInt(id) }))
+        },
         brandId: data.brandId ? parseInt(data.brandId) : null,
       }
     });
@@ -29,7 +31,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
-      include: { category: true, brand: true },
+      include: { categories: true, brand: true },
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }]
     });
     return NextResponse.json({ success: true, products });

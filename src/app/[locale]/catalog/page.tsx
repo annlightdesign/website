@@ -45,8 +45,8 @@ export default async function CatalogPage(props: {
   const categories = await prisma.category.findMany();
 
   const products = await prisma.product.findMany({
-    where: categoryId ? { categoryId } : undefined,
-    include: { category: true, brand: true },
+    where: categoryId ? { categories: { some: { id: categoryId } } } : undefined,
+    include: { categories: true, brand: true },
     orderBy: [{ order: 'asc' }, { createdAt: 'desc' }]
   });
 
@@ -109,7 +109,7 @@ export default async function CatalogPage(props: {
                 </div>
                 <div className={locale === 'he' ? 'text-right' : 'text-left'}>
                   <h2 className="text-sm font-semibold uppercase tracking-wider" dir="auto">{locale === 'he' && product.titleHe ? product.titleHe : product.title}</h2>
-                  <p className="text-xs text-muted-foreground mt-1 text-inherit">{product.category ? translateCategory(product.category.name, locale) : (locale === 'he' ? 'ללא קטגוריה' : 'Uncategorized')}</p>
+                  <p className="text-xs text-muted-foreground mt-1 text-inherit">{product.categories && product.categories.length > 0 ? product.categories.map(c => translateCategory(c.name, locale)).join(', ') : (locale === 'he' ? 'ללא קטגוריה' : 'Uncategorized')}</p>
                 </div>
               </Link>
             ))

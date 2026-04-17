@@ -33,7 +33,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         description: data.description,
         images: data.images || [], 
         specifications: data.specifications || {}, 
-        categoryId: parseInt(data.categoryId),
+        categories: {
+          set: data.categoryIds.map((id: string) => ({ id: parseInt(id) }))
+        },
         brandId: data.brandId ? parseInt(data.brandId) : null,
       }
     });

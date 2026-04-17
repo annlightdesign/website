@@ -35,7 +35,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
     
     const existingProduct = await prisma.product.findUnique({
-      where: { id: productId }
+      where: { id: productId },
+      include: { categories: true }
     });
 
     if (!existingProduct) {
@@ -52,7 +53,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         description: existingProduct.description,
         images: existingProduct.images as any,
         specifications: existingProduct.specifications as any,
-        categoryId: targetCategoryId || existingProduct.categoryId,
+        categories: {
+          connect: targetCategoryId ? [{ id: targetCategoryId }] : existingProduct.categories.map(c => ({ id: c.id }))
+        },
         brandId: existingProduct.brandId
       }
     });

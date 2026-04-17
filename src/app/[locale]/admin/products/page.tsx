@@ -6,17 +6,18 @@ import { ArrowLeft } from 'lucide-react';
 
 export default async function AdminProductsPage() {
   const allProducts = await prisma.product.findMany({ 
+    include: { categories: true },
     orderBy: [{ order: 'asc' }, { createdAt: 'desc' }] 
   });
   const categories = await prisma.category.findMany();
 
-  // Group products by categoryId
+  // Group products by category
   const productsByCategory = categories.map(cat => ({
     category: cat,
-    products: allProducts.filter(p => p.categoryId === cat.id)
+    products: allProducts.filter(p => p.categories.some(c => c.id === cat.id))
   }));
 
-  const uncategorizedProducts = allProducts.filter(p => !p.categoryId);
+  const uncategorizedProducts = allProducts.filter(p => !p.categories || p.categories.length === 0);
 
   return (
     <div className="p-10 max-w-5xl mx-auto space-y-10 pb-40">
