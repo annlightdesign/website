@@ -208,7 +208,7 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
         </button>
       ) : (
         <button onClick={() => setIsOpen(true)} className="bg-transparent border border-border text-foreground px-6 py-3 uppercase text-sm font-medium tracking-widest font-sans hover:bg-muted transition flex items-center gap-2">
-          + Compile Product
+          + Add Product
         </button>
       )}
 
@@ -221,8 +221,8 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
             </div>
 
             <form onSubmit={submit} className="flex flex-col gap-5 text-sm">
-              <input required placeholder="Title" value={formData.title} onChange={e=>{setFormData({...formData, title: e.target.value}); setIsDirty(true);}} className="border border-border bg-background p-3 outline-none" />
-              <input placeholder="Hebrew Title (Optional)" value={formData.titleHe} onChange={e=>{setFormData({...formData, titleHe: e.target.value}); setIsDirty(true);}} className="border border-border bg-background p-3 outline-none text-right" dir="auto" />
+              <input required placeholder="English Title (Required)" value={formData.title} onChange={e=>{setFormData({...formData, title: e.target.value}); setIsDirty(true);}} className="border border-border bg-background p-3 outline-none" />
+              <input placeholder="Hebrew Title (Optional)" value={formData.titleHe} onChange={e=>{setFormData({...formData, titleHe: e.target.value}); setIsDirty(true);}} className="border border-border bg-background p-3 outline-none" />
               <textarea placeholder="Description" value={formData.description} onChange={e=>{setFormData({...formData, description: e.target.value}); setIsDirty(true);}} className="border border-border bg-background p-3 outline-none min-h-[100px]" />
               
               <label 
@@ -283,26 +283,28 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
               <div className="flex flex-col gap-4 border-t border-border pt-4">
                 <div className="flex justify-between items-center">
                   <label className="text-xs uppercase tracking-widest font-semibold text-muted-foreground">Specifications</label>
-                  <label className="flex items-center gap-2 cursor-pointer text-xs text-muted-foreground hover:text-foreground">
-                    <input type="checkbox" checked={showJson} onChange={(e) => {
-                      if (e.target.checked) {
-                        // Switching to JSON mode: build JSON from inputs
-                        const specsObj = specifications.reduce((acc, curr) => {
-                          const k = curr.key.trim();
-                          if (k) acc[k] = curr.value;
-                          return acc;
-                        }, {} as Record<string, string>);
-                        setRawJson(JSON.stringify(specsObj, null, 2));
-                      } else {
-                        // Switching to Builder mode: parse JSON to inputs
-                        try {
-                          const parsed = JSON.parse(rawJson);
-                          setSpecifications(Object.entries(parsed).map(([k, v]) => ({ key: k, value: String(v) })));
-                        } catch (err) {}
-                      }
-                      setShowJson(e.target.checked);
-                    }} className="accent-foreground" />
-                    Advanced: Edit Raw JSON
+                  <label className="flex items-center gap-3 cursor-pointer text-[10px] font-medium uppercase tracking-widest text-muted-foreground hover:text-foreground transition-all group select-none">
+                    <span className={showJson ? 'text-foreground' : ''}>Advanced JSON</span>
+                    <div className="relative flex items-center">
+                      <input type="checkbox" checked={showJson} onChange={(e) => {
+                        if (e.target.checked) {
+                          const specsObj = specifications.reduce((acc, curr) => {
+                            const k = curr.key.trim();
+                            if (k) acc[k] = curr.value;
+                            return acc;
+                          }, {} as Record<string, string>);
+                          setRawJson(JSON.stringify(specsObj, null, 2));
+                        } else {
+                          try {
+                            const parsed = JSON.parse(rawJson);
+                            setSpecifications(Object.entries(parsed).map(([k, v]) => ({ key: k, value: String(v) })));
+                          } catch (err) {}
+                        }
+                        setShowJson(e.target.checked);
+                      }} className="sr-only" />
+                      <div className={`w-8 h-4 rounded-full transition-colors duration-300 ease-in-out ${showJson ? 'bg-foreground' : 'bg-muted-foreground/30'}`}></div>
+                      <div className={`absolute w-3 h-3 rounded-full bg-background shadow-sm transition-transform duration-300 ease-in-out ${showJson ? 'translate-x-[18px]' : 'translate-x-[2px]'}`}></div>
+                    </div>
                   </label>
                 </div>
                 
