@@ -11,3 +11,24 @@ export async function GET() {
     return NextResponse.json({ error: error.message || 'Error occurred' }, { status: 500 });
   }
 }
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const { name } = body;
+    
+    if (!name) {
+      return NextResponse.json({ error: 'Name is required' }, { status: 400 });
+    }
+
+    const category = await prisma.category.create({
+      data: {
+        name,
+      }
+    });
+
+    return NextResponse.json({ success: true, category });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message || 'Error occurred' }, { status: 500 });
+  }
+}

@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import ProductForm from '@/components/ProductForm';
+import CategoryForm from '@/components/CategoryForm';
 import AdminCategoryAccordion from '@/components/AdminCategoryAccordion';
 import { ArrowLeft } from 'lucide-react';
 
@@ -22,7 +23,10 @@ export default async function AdminProductsPage() {
       
       <div className="mb-10 flex items-center justify-between border-b border-border/40 pb-6">
         <h1 className="text-3xl font-medium tracking-widest uppercase font-sans">Manage Products</h1>
-        <ProductForm />
+        <div className="flex items-center gap-4">
+          <CategoryForm />
+          <ProductForm />
+        </div>
       </div>
 
       <div className="mt-10 space-y-2">
