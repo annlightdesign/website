@@ -70,12 +70,12 @@ export default function AdminCategoryAccordion({
     });
 
     if (res.ok) {
-      toast.success("Catalog deleted!");
+      toast.success("Category deleted!");
       setIsConfirmOpen(false);
       window.location.reload();
     } else {
       const errText = await res.text();
-      toast.error("Failed to delete catalog", { description: errText });
+      toast.error("Failed to delete category", { description: errText });
     }
     setIsDeleting(false);
   };
@@ -92,7 +92,7 @@ export default function AdminCategoryAccordion({
   }
 
   return (
-    <div className="mb-4 bg-background border border-border/40 overflow-hidden shadow-sm">
+    <div className={`mb-4 bg-background border border-border/40 shadow-sm relative ${isMenuOpen ? 'z-50' : 'z-10'}`}>
       {/* Header */}
       <div
         onClick={toggleAccordion}
@@ -179,9 +179,9 @@ export default function AdminCategoryAccordion({
         isOpen={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={handleDelete}
-        title="Delete Catalog?"
-        message={`Are you sure you want to delete the catalog "${category?.name || title}"? This action cannot be undone. To prevent accidental data loss, you must first remove or reassign all products within this catalog before deleting it.`}
-        confirmText={isDeleting ? "Deleting..." : "Delete Catalog"}
+        title="Delete Category?"
+        message={`Are you sure you want to delete the category "${category?.name || title}"? This action cannot be undone. To prevent accidental data loss, you must first remove or reassign all products within this category before deleting it.`}
+        confirmText={isDeleting ? "Deleting..." : "Delete Category"}
         confirmStyle="danger"
       />
     </div>

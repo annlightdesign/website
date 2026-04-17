@@ -37,7 +37,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     });
 
     if (productCount > 0) {
-      return NextResponse.json({ error: 'Cannot delete a catalog that has products. Please remove or reassign the products first.' }, { status: 400 });
+      return NextResponse.json({ error: 'Cannot delete a category that has products. Please remove or reassign the products first.' }, { status: 400 });
     }
 
     await prisma.category.delete({

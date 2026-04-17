@@ -48,7 +48,7 @@ export default function CategoryForm({ existingCategory, trigger }: CategoryForm
     });
 
     if (res.ok) {
-      toast.success(isEdit ? "Catalog updated!" : "Catalog created!");
+      toast.success(isEdit ? "Category updated!" : "Category created!");
       setIsOpen(false);
       if (!isEdit) {
         setName('');
@@ -57,7 +57,7 @@ export default function CategoryForm({ existingCategory, trigger }: CategoryForm
       window.location.reload();
     } else {
       const errText = await res.text();
-      toast.error(isEdit ? "Failed to update catalog" : "Failed to create catalog", { description: errText });
+      toast.error(isEdit ? "Failed to update category" : "Failed to create category", { description: errText });
     }
     setLoading(false);
   };
@@ -78,7 +78,7 @@ export default function CategoryForm({ existingCategory, trigger }: CategoryForm
       <div onClick={() => setIsOpen(true)}>
         {trigger ? trigger : (
           <button className="bg-transparent border border-border text-foreground px-6 py-3 uppercase text-sm font-medium tracking-widest font-sans hover:bg-muted transition flex items-center gap-2">
-            + Add Catalog
+            + Add Category
           </button>
         )}
       </div>
@@ -88,24 +88,24 @@ export default function CategoryForm({ existingCategory, trigger }: CategoryForm
           <div className="bg-background border border-border p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6 border-b border-border pb-4">
               <h2 className="text-xl font-medium uppercase tracking-widest font-sans">
-                {existingCategory ? "Edit Catalog" : "New Catalog"}
+                {existingCategory ? "Edit Category" : "New Category"}
               </h2>
               <button disabled={loading} onClick={handleClose}><X className="w-6 h-6 hover:text-muted-foreground" /></button>
             </div>
 
             <form onSubmit={submit} className="flex flex-col gap-5 text-sm">
               <div className="flex flex-col gap-2">
-                <label className="text-xs uppercase tracking-widest font-semibold text-muted-foreground">Catalog Name (English)</label>
+                <label className="text-xs uppercase tracking-widest font-semibold text-muted-foreground">Category Name (English)</label>
                 <input required placeholder="e.g. Indoor Lighting" value={name} onChange={e => setName(e.target.value)} className="border border-border bg-background p-3 outline-none" autoFocus />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-xs uppercase tracking-widest font-semibold text-muted-foreground">Catalog Name (Hebrew)</label>
+                <label className="text-xs uppercase tracking-widest font-semibold text-muted-foreground">Category Name (Hebrew)</label>
                 <input placeholder="e.g. תאורת פנים" value={nameHe} onChange={e => setNameHe(e.target.value)} className="border border-border bg-background p-3 outline-none text-right" dir="auto" />
               </div>
 
               <button disabled={loading || !name.trim()} type="submit" className="bg-accent text-accent-foreground p-4 mt-2 uppercase font-medium tracking-widest w-full font-sans transition-opacity hover:opacity-90 disabled:opacity-50">
-                {loading ? "Processing..." : (existingCategory ? "Save Changes" : "Create Catalog")}
+                {loading ? "Processing..." : (existingCategory ? "Save Changes" : "Create Category")}
               </button>
             </form>
           </div>
