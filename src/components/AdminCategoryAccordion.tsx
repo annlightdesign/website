@@ -125,17 +125,18 @@ export default function AdminCategoryAccordion({
                       transition={{ duration: 0.15 }}
                       className="absolute right-0 top-full mt-1 bg-background border border-border shadow-sm min-w-[140px] z-20 flex flex-col py-1"
                     >
-                      <CategoryForm 
-                        existingCategory={category} 
-                        trigger={
-                          <button 
-                            className="w-full text-left px-4 py-2 hover:bg-muted text-[13px] font-medium tracking-wide uppercase transition-colors" 
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            Edit
-                          </button>
-                        } 
-                      />
+                      <button 
+                        className="w-full text-left px-4 py-2 hover:bg-muted text-[13px] font-medium tracking-wide uppercase transition-colors" 
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          // Defer click to allow state update to finish
+                          setTimeout(() => {
+                            document.getElementById(`edit-cat-${category.id}`)?.click();
+                          }, 10);
+                        }}
+                      >
+                        Edit
+                      </button>
                       <button 
                         className="w-full text-left px-4 py-2 hover:bg-red-500/10 text-red-500 text-[13px] font-medium tracking-wide uppercase transition-colors" 
                         onClick={() => { setIsConfirmOpen(true); setIsMenuOpen(false); }}
@@ -145,6 +146,12 @@ export default function AdminCategoryAccordion({
                     </motion.div>
                   )}
                 </AnimatePresence>
+             </div>
+             <div className="hidden">
+               <CategoryForm 
+                 existingCategory={category} 
+                 trigger={<button id={`edit-cat-${category.id}`} type="button" />} 
+               />
              </div>
           )}
           <div className="text-muted-foreground flex items-center justify-center p-1">
