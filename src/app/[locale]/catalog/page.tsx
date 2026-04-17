@@ -20,18 +20,17 @@ export default async function CatalogPage(props: {
   searchParams: Promise<{ category?: string }>
 }) {
   const { locale } = await props.params;
-  
+  const t = await getTranslations('Catalog');
+
   return (
     <main className={`container mx-auto px-6 py-32 min-h-[70vh] flex flex-col items-center justify-center text-center ${locale === 'he' ? assistantFont.className : ''}`}>
       <div className="max-w-3xl mx-auto space-y-8">
         <h1 className="text-4xl md:text-5xl uppercase font-light tracking-[0.2em] text-foreground">
-          {locale === 'he' ? 'הקטלוג בבנייה' : 'Catalog Coming Soon'}
+          {t('title')}
         </h1>
         <div className="w-16 h-[1px] bg-foreground/20 mx-auto"></div>
         <p className="text-muted-foreground text-lg md:text-xl font-light leading-relaxed">
-          {locale === 'he' 
-            ? 'אנו שוקדים כעת על הכנת הקטלוג החדש שלנו. במקביל אפשר לראות את הפרויקטים שלנו ולתרשם מהקולקציות החדשות שמופיעות ממש עוד מעט.' 
-            : 'We are currently curating our new product catalog. It will be available soon featuring our latest architectural lighting collections.'}
+          {t('description')}
         </p>
       </div>
     </main>

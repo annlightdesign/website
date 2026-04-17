@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function ProductPage(props: { params: Promise<{ id: string, locale: string }> }) {
   const { id, locale } = await props.params;
-  const t = await getTranslations('Navigation');
+  const t = await getTranslations('Catalog');
   console.log("ProductPage ID params received:", id);
   
   const product = await prisma.product.findUnique({
@@ -48,7 +48,7 @@ export default async function ProductPage(props: { params: Promise<{ id: string,
         className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors mb-12 ${locale === 'he' ? 'ml-auto flex-row-reverse' : ''}`}
       >
         {locale === 'he' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-        {locale === 'he' ? 'חזרה לקטלוג' : 'Back to Catalog'}
+        {t('back')}
       </Link>
 
       <div className={`flex flex-col lg:flex-row gap-16 lg:gap-24 ${locale === 'he' ? 'lg:flex-row-reverse text-right' : 'text-left'}`}>
@@ -62,7 +62,7 @@ export default async function ProductPage(props: { params: Promise<{ id: string,
         <div className="flex-1 flex flex-col justify-center">
            <div className={`mb-8 border-b border-border pb-8`}>
              <h3 className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-3">
-               {product.categories && product.categories.length > 0 ? product.categories.map(c => translateCategory(c.name, locale)).join(', ') : (locale === 'he' ? 'ללא קטגוריה' : 'Uncategorized')}
+               {product.categories && product.categories.length > 0 ? product.categories.map(c => locale === 'he' && c.nameHe ? c.nameHe : c.name).join(', ') : t('uncategorized')}
              </h3>
              <h1 className="text-3xl md:text-5xl font-light uppercase tracking-widest mb-6 leading-tight" dir="auto">
                {locale === 'he' && product.titleHe ? product.titleHe : product.title}
@@ -78,7 +78,7 @@ export default async function ProductPage(props: { params: Promise<{ id: string,
            {specKeys.length > 0 && (
              <div>
                <h3 className="text-xs uppercase tracking-widest text-foreground font-semibold mb-6">
-                 {locale === 'he' ? 'מפרט טכני' : 'Technical Specifications'}
+                 {t('technicalSpecs')}
                </h3>
                
                <div className="grid grid-cols-1 gap-x-12 gap-y-4">
@@ -95,7 +95,7 @@ export default async function ProductPage(props: { params: Promise<{ id: string,
            {/* Call to action or dynamic info can go here */}
            <div className="mt-16">
              <Link href="/contact" className={`inline-block border border-foreground text-foreground hover:bg-foreground hover:text-background transition-colors px-10 py-4 uppercase text-xs tracking-[0.2em] font-semibold ${locale === 'he' ? 'text-center w-full md:w-auto' : ''}`}>
-               {locale === 'he' ? 'לקבלת פרטים נוספים והצעת מחיר' : 'Request More Information'}
+               {t('requestInfo')}
              </Link>
            </div>
         </div>

@@ -37,7 +37,7 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
     images: (existingProduct?.images as string[]) || []
   });
 
-  const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
+  const [categories, setCategories] = useState<{id: number, name: string, nameHe?: string | null}[]>([]);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -270,7 +270,7 @@ export default function ProductForm({ existingProduct }: { existingProduct?: any
                             setIsDirty(true);
                           }} 
                         />
-                        {cat.name}
+                        {cat.name} {cat.nameHe && <span className="text-[10px] opacity-70"> / {cat.nameHe}</span>}
                       </label>
                     );
                   })}

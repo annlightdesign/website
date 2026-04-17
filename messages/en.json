@@ -55,5 +55,18 @@
     "namePlaceholder": "Full Name (Required)",
     "privacyPolicy": "Sending the details confirms the website's privacy policy",
     "sendRequest": "Send Request"
+  },
+  "Catalog": {
+    "title": "Catalog Coming Soon",
+    "description": "We are currently curating our new product catalog. It will be available soon featuring our latest architectural lighting collections.",
+    "categories": "Categories",
+    "brands": "Brands",
+    "topSelling": "Top Selling",
+    "noProducts": "No products found in the catalog.",
+    "noImage": "No Image",
+    "uncategorized": "Uncategorized",
+    "back": "Back to Catalog",
+    "technicalSpecs": "Technical Specifications",
+    "requestInfo": "Request More Information"
   }
 }

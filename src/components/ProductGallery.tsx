@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 
 interface ProductGalleryProps {
@@ -13,6 +14,7 @@ interface ProductGalleryProps {
 export default function ProductGallery({ images, title, locale }: ProductGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
+  const t = useTranslations('Catalog');
   const isHebrew = locale === 'he';
 
   const openLightbox = (index: number) => {
@@ -53,7 +55,7 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
   if (!images || images.length === 0) {
     return (
       <div className="aspect-square bg-muted relative w-full flex items-center justify-center text-muted-foreground border border-dashed border-border">
-        <span className="uppercase tracking-widest text-sm">No Images Available</span>
+        <span className="uppercase tracking-widest text-sm">{t('noImage')}</span>
       </div>
     );
   }
