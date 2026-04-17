@@ -28,6 +28,7 @@ export default function AdminCategoryAccordion({
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [mounted, setMounted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   
@@ -129,10 +130,7 @@ export default function AdminCategoryAccordion({
                         className="w-full text-left px-4 py-2 hover:bg-muted text-[13px] font-medium tracking-wide uppercase transition-colors" 
                         onClick={() => {
                           setIsMenuOpen(false);
-                          // Defer click to allow state update to finish
-                          setTimeout(() => {
-                            document.getElementById(`edit-cat-${category.id}`)?.click();
-                          }, 10);
+                          setIsEditModalOpen(true);
                         }}
                       >
                         Edit
@@ -147,12 +145,12 @@ export default function AdminCategoryAccordion({
                   )}
                 </AnimatePresence>
              </div>
-             <div className="hidden">
-               <CategoryForm 
+             <CategoryForm 
                  existingCategory={category} 
-                 trigger={<button id={`edit-cat-${category.id}`} type="button" />} 
-               />
-             </div>
+                 trigger={null}
+                 externalOpen={isEditModalOpen}
+                 onExternalClose={() => setIsEditModalOpen(false)}
+             />
           )}
           <div className="text-muted-foreground flex items-center justify-center p-1">
             {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}

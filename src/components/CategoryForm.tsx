@@ -8,10 +8,17 @@ import { toast } from 'sonner';
 interface CategoryFormProps {
   existingCategory?: { id: number; name: string; nameHe?: string | null };
   trigger?: ReactNode;
+  externalOpen?: boolean;
+  onExternalClose?: () => void;
 }
 
-export default function CategoryForm({ existingCategory, trigger }: CategoryFormProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function CategoryForm({ existingCategory, trigger, externalOpen, onExternalClose }: CategoryFormProps) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = externalOpen !== undefined ? externalOpen : internalIsOpen;
+  const setIsOpen = (val: boolean) => {
+    if (externalOpen === undefined) setInternalIsOpen(val);
+    else if (!val && onExternalClose) onExternalClose();
+  };
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState(existingCategory?.name || '');
@@ -63,7 +70,11 @@ export default function CategoryForm({ existingCategory, trigger }: CategoryForm
   };
 
   const handleClose = () => {
-    setIsOpen(false);
+    if (externalOpen !== undefined && onExternalClose) {
+      onExternalClose();
+    } else {
+      setIsOpen(false);
+    }
     if (!existingCategory) {
       setName('');
       setNameHe('');
@@ -75,13 +86,15 @@ export default function CategoryForm({ existingCategory, trigger }: CategoryForm
 
   return (
     <>
-      <div onClick={() => setIsOpen(true)}>
-        {trigger ? trigger : (
-          <button className="bg-transparent border border-border text-foreground px-6 py-3 uppercase text-sm font-medium tracking-widest font-sans hover:bg-muted transition flex items-center gap-2">
-            + Add Category
-          </button>
-        )}
-      </div>
+      {trigger !== null && (
+        <div onClick={() => setIsOpen(true)}>
+          {trigger !== undefined ? trigger : (
+            <button className="bg-transparent border border-border text-foreground px-6 py-3 uppercase text-sm font-medium tracking-widest font-sans hover:bg-muted transition flex items-center gap-2">
+              + Add Category
+            </button>
+          )}
+        </div>
+      )}
 
       {mounted && isOpen && createPortal(
         <div className="fixed inset-0 bg-background/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
