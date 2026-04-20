@@ -64,6 +64,8 @@ export default async function SingleProjectPage({ params }: { params: Promise<{ 
   const t = await getTranslations('Projects');
   
   const projectId = parseInt(id, 10);
+  if (isNaN(projectId)) notFound();
+  
   const project = await prisma.project.findUnique({
     where: { id: projectId }
   });

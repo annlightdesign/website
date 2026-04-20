@@ -12,7 +12,10 @@ const assistantFont = Assistant({ subsets: ['hebrew', 'latin'] });
 export async function generateMetadata({ params }: { params: Promise<{ id: string, locale: string }> }) {
   const { id, locale } = await params;
   console.log("generateMetadata ID params received:", id);
-  const product = await prisma.product.findUnique({ where: { id: parseInt(id) } });
+  const parsedId = parseInt(id, 10);
+  if (isNaN(parsedId)) return { title: 'Not Found' };
+
+  const product = await prisma.product.findUnique({ where: { id: parsedId } });
   console.log("generateMetadata product found:", product?.id);
   
   if (!product) return { title: 'Not Found' };
@@ -24,8 +27,11 @@ export default async function ProductPage(props: { params: Promise<{ id: string,
   const t = await getTranslations('Catalog');
   console.log("ProductPage ID params received:", id);
   
+  const parsedId = parseInt(id, 10);
+  if (isNaN(parsedId)) notFound();
+
   const product = await prisma.product.findUnique({
-    where: { id: parseInt(id) },
+    where: { id: parsedId },
     include: { categories: true, brand: true }
   });
   console.log("ProductPage product found:", product?.id);
