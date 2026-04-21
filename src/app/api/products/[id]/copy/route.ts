@@ -24,6 +24,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { id } = await params;
     const productId = parseInt(id, 10);
     
+    if (isNaN(productId)) {
+      return NextResponse.json({ error: 'Invalid product ID format' }, { status: 400 });
+    }
+
     let targetCategoryId: number | undefined;
     try {
       const data = await request.json();

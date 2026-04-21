@@ -25,6 +25,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const { id } = await params;
     const productId = parseInt(id, 10);
     
+    if (isNaN(productId)) {
+      return NextResponse.json({ error: 'Invalid product ID format' }, { status: 400 });
+    }
+    
     const updatedProduct = await prisma.product.update({
       where: { id: productId },
       data: {

@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 
-import { BarChart, Monitor, Smartphone, Globe, MapPin, Search } from 'lucide-react';
+import { BarChart, Monitor, Smartphone, Globe, MapPin, Search, ExternalLink, ArrowRightCircle } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import ClearVisitorsButton from './ClearVisitorsButton';
 
@@ -79,6 +79,7 @@ export default async function VisitorsPage() {
                 <th className="px-6 py-4 font-medium">Time (Local)</th>
                 <th className="px-6 py-4 font-medium">Location</th>
                 <th className="px-6 py-4 font-medium">Path Visited</th>
+                <th className="px-6 py-4 font-medium">Source</th>
                 <th className="px-6 py-4 font-medium">Device & Browser</th>
                 <th className="px-6 py-4 font-medium">IP Address</th>
               </tr>
@@ -86,7 +87,7 @@ export default async function VisitorsPage() {
             <tbody>
               {visitors.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
+                  <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
                     No visitor data available yet.
                   </td>
                 </tr>
@@ -115,6 +116,22 @@ export default async function VisitorsPage() {
                     </td>
                     <td className="px-6 py-4 font-mono text-xs truncate max-w-[200px]" title={v.path || '/'}>
                       {v.path}
+                    </td>
+                    <td className="px-6 py-4 max-w-[150px] truncate">
+                      {(() => {
+                        if (!v.source) return <span className="text-muted-foreground flex items-center gap-1"><ArrowRightCircle className="w-3 h-3"/> Direct Visit</span>;
+                        const lowerSource = v.source.toLowerCase();
+                        if (lowerSource.includes('google.com')) return <span className="text-emerald-500 font-medium flex items-center gap-1"><Search className="w-3 h-3"/> Google</span>;
+                        if (lowerSource.includes('bing.com')) return <span className="text-blue-500 font-medium flex items-center gap-1"><Search className="w-3 h-3"/> Bing</span>;
+                        if (lowerSource.includes('instagram.com') || lowerSource.includes('facebook.com')) return <span className="text-pink-500 font-medium flex items-center gap-1"><ExternalLink className="w-3 h-3"/> Social</span>;
+                        
+                        try {
+                          const url = new URL(v.source);
+                          return <a href={v.source} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline flex items-center gap-1" title={v.source}><ExternalLink className="w-3 h-3"/> {url.hostname.replace('www.', '')}</a>;
+                        } catch {
+                          return <span className="text-muted-foreground truncate block" title={v.source}>{v.source}</span>;
+                        }
+                      })()}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col">

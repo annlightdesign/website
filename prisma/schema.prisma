@@ -86,6 +86,7 @@ model VisitorLog {
   os        String?
   device    String?
   path      String?
+  source    String?
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 }

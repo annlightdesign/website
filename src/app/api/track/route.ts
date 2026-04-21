@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
   try {
-    const { path } = await req.json();
+    const { path, source } = await req.json();
     
     const { browser, os, device } = userAgent(req);
     
@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
         os: os.name || 'Unknown',
         device: device.type || 'desktop',
         path: path || '/',
+        source: source || null,
       }
     });
 
