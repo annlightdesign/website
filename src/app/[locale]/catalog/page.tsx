@@ -4,7 +4,7 @@ import { Link } from '@/i18n/routing';
 import { Assistant } from 'next/font/google';
 import { translateCategory } from '@/lib/dictionaries';
 import CinematicCategory from '@/components/CinematicCategory';
-import CustomCursor from '@/components/CustomCursor';
+
 
 const assistantFont = Assistant({ subsets: ['hebrew', 'latin'] });
 
@@ -64,7 +64,6 @@ export default async function CatalogPage(props: {
 
     return (
       <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
-        <CustomCursor />
         
         {/* Editorial Header */}
         <div className="w-full pt-48 pb-24 px-8 md:px-16 flex flex-col items-center text-center">
@@ -99,7 +98,7 @@ export default async function CatalogPage(props: {
                     key={cat.id} 
                     href={`/catalog?category=${cat.id}`} 
                     prefetch={false}
-                    className="group flex flex-col items-center cursor-none"
+                    className="group flex flex-col items-center"
                   >
                     {/* Floating Image Container */}
                     <div className="w-full aspect-[4/5] relative flex items-center justify-center mb-10 overflow-hidden bg-neutral-100/5 dark:bg-neutral-900/50 rounded-sm">
@@ -149,7 +148,6 @@ export default async function CatalogPage(props: {
 
   return (
     <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
-      <CustomCursor />
       
       {/* Editorial Header */}
       <div className="w-full pt-48 pb-24 px-8 md:px-16 flex flex-col items-center text-center">
@@ -195,7 +193,7 @@ export default async function CatalogPage(props: {
                 key={product.id} 
                 href={`/catalog/product/${product.id}`} 
                 prefetch={false}
-                className="group flex flex-col items-center cursor-none"
+                className="group flex flex-col items-center"
               >
                 {/* Floating Image Container */}
                 <div className="w-full aspect-[4/5] relative flex items-center justify-center mb-10 overflow-hidden bg-neutral-100/5 dark:bg-neutral-900/50 rounded-sm">
