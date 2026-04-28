@@ -37,6 +37,7 @@ export default function AdminCategoryAccordion({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdatingEnabled, setIsUpdatingEnabled] = useState(false);
   
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -126,6 +127,36 @@ export default function AdminCategoryAccordion({
         <div className="flex flex-row items-center gap-1">
           {category && (
             <>
+              <label 
+                className={`relative inline-flex items-center cursor-pointer mr-3 ${isUpdatingEnabled ? 'opacity-50 pointer-events-none' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+                title={category.enabled === false ? "Enable Category" : "Disable Category"}
+              >
+                <input 
+                  type="checkbox" 
+                  checked={category.enabled !== false} 
+                  onChange={async (e) => {
+                    const newEnabledState = e.target.checked;
+                    setIsUpdatingEnabled(true);
+                    const res = await fetch(`/api/categories/${category.id}`, {
+                      method: "PUT",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ name: category.name, nameHe: category.nameHe, enabled: newEnabledState })
+                    });
+                    if (res.ok) {
+                      toast.success(newEnabledState ? "Category enabled" : "Category disabled");
+                      window.location.reload();
+                    } else {
+                      toast.error("Failed to update category");
+                      setIsUpdatingEnabled(false);
+                    }
+                  }} 
+                  disabled={isUpdatingEnabled}
+                  className="sr-only peer" 
+                />
+                <div className="w-9 h-5 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+              </label>
+
               <div className="relative" ref={menuRef} onClick={(e) => e.stopPropagation()}>
                 <button 
                   onClick={() => setIsMenuOpen(!isMenuOpen)} 
