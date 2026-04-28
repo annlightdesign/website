@@ -69,11 +69,11 @@ export default function Navigation() {
 
         {/* Desktop Navigation */}
         <nav className={`hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-10 text-sm font-medium uppercase text-foreground ${locale === 'he' ? 'flex-row-reverse' : ''}`}>
-          <Link href="/catalog" className={navLinkClass}>{t('catalog')}</Link>
-          <Link href="/projects" className={navLinkClass}>{t('projects')}</Link>
-          <Link href="/brands" className={navLinkClass}>{t('brands')}</Link>
-          <Link href="/architects" className={navLinkClass}>{t('architects')}</Link>
-          <Link href="/contact" className={navLinkClass}>{t('contact')}</Link>
+          <Link href="/catalog" prefetch={false} className={navLinkClass}>{t('catalog')}</Link>
+          <Link href="/projects" prefetch={false} className={navLinkClass}>{t('projects')}</Link>
+          <Link href="/brands" prefetch={false} className={navLinkClass}>{t('brands')}</Link>
+          <Link href="/architects" prefetch={false} className={navLinkClass}>{t('architects')}</Link>
+          <Link href="/contact" prefetch={false} className={navLinkClass}>{t('contact')}</Link>
         </nav>
 
         {/* Icons */}
@@ -91,11 +91,11 @@ export default function Navigation() {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="absolute top-full left-0 w-full bg-background/95 backdrop-blur-xl border-b border-border p-8 lg:hidden flex flex-col gap-6 text-sm tracking-widest uppercase font-medium shadow-2xl">
-          <Link href="/catalog" onClick={() => setIsMenuOpen(false)} className="w-fit">{t('catalog')}</Link>
-          <Link href="/projects" onClick={() => setIsMenuOpen(false)} className="w-fit">{t('projects')}</Link>
-          <Link href="/brands" onClick={() => setIsMenuOpen(false)} className="w-fit">{t('brands')}</Link>
-          <Link href="/architects" onClick={() => setIsMenuOpen(false)} className="w-fit">{t('architects')}</Link>
-          <Link href="/contact" onClick={() => setIsMenuOpen(false)} className="w-fit">{t('contact')}</Link>
+          <Link href="/catalog" prefetch={false} onClick={() => setIsMenuOpen(false)} className="w-fit">{t('catalog')}</Link>
+          <Link href="/projects" prefetch={false} onClick={() => setIsMenuOpen(false)} className="w-fit">{t('projects')}</Link>
+          <Link href="/brands" prefetch={false} onClick={() => setIsMenuOpen(false)} className="w-fit">{t('brands')}</Link>
+          <Link href="/architects" prefetch={false} onClick={() => setIsMenuOpen(false)} className="w-fit">{t('architects')}</Link>
+          <Link href="/contact" prefetch={false} onClick={() => setIsMenuOpen(false)} className="w-fit">{t('contact')}</Link>
         </div>
       )}
     </header>
