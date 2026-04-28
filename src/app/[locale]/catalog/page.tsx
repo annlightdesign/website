@@ -63,17 +63,17 @@ export default async function CatalogPage(props: {
     });
 
     return (
-      <main className={`w-full min-h-screen bg-[#faf9f8] text-[#2a2a2a] ${locale === 'he' ? assistantFont.className : ''}`}>
+      <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
         <CustomCursor />
         
         {/* Editorial Header */}
         <div className="w-full pt-48 pb-24 px-8 md:px-16 flex flex-col items-center text-center">
-          <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-[#2a2a2a] mb-10">
+          <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-foreground mb-10">
             {tNav('catalog')}
           </h1>
-          <div className="w-8 h-[1px] bg-[#2a2a2a]/20 mb-24" />
+          <div className="w-8 h-[1px] bg-foreground/20 mb-24" />
           
-          <p className="text-xs uppercase tracking-[0.2em] font-light text-[#2a2a2a]/40 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs uppercase tracking-[0.2em] font-light text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             {locale === 'he' ? 'חקור את קולקציות התאורה האדריכלית שלנו.' : 'Explore our architectural lighting collections.'}
           </p>
         </div>
@@ -82,7 +82,7 @@ export default async function CatalogPage(props: {
         <div className="w-full px-8 md:px-16 pb-40">
           <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 md:gap-x-24 gap-y-32 max-w-[1800px] mx-auto ${locale === 'he' ? 'rtl' : 'ltr'}`}>
             {categories.length === 0 ? (
-              <div className="col-span-full py-32 text-center text-[#2a2a2a]/40 font-light tracking-widest uppercase text-sm">
+              <div className="col-span-full py-32 text-center text-muted-foreground font-light tracking-widest uppercase text-sm">
                 {locale === 'he' ? 'לא נמצאו קולקציות.' : 'No collections found.'}
               </div>
             ) : (
@@ -102,20 +102,20 @@ export default async function CatalogPage(props: {
                     className="group flex flex-col items-center cursor-none"
                   >
                     {/* Floating Image Container */}
-                    <div className="w-full aspect-[4/5] relative flex items-center justify-center mb-10 overflow-hidden">
+                    <div className="w-full aspect-[4/5] relative flex items-center justify-center mb-10 overflow-hidden bg-neutral-100/5 dark:bg-neutral-900/50 rounded-sm">
                       {imgUrl ? (
                         <img
                           src={imgUrl}
                           alt={translateCategory(cat.name, locale)}
-                          className="w-full h-full object-contain mix-blend-multiply transition-transform duration-[1.5s] ease-[0.22,1,0.36,1] group-hover:scale-[1.04]"
+                          className="w-full h-full object-contain transition-transform duration-[1.5s] ease-[0.22,1,0.36,1] group-hover:scale-[1.04]"
                         />
                       ) : (
-                        <span className="text-[9px] uppercase tracking-widest text-[#2a2a2a]/20">Archive</span>
+                        <span className="text-[9px] uppercase tracking-widest text-muted-foreground/30">Archive</span>
                       )}
                     </div>
                     
                     {/* Minimal Typography */}
-                    <h2 className="text-[11px] md:text-[13px] font-light uppercase tracking-[0.25em] text-[#2a2a2a]/70 group-hover:text-[#2a2a2a] transition-colors duration-700 text-center" dir="auto">
+                    <h2 className="text-[11px] md:text-[13px] font-light uppercase tracking-[0.25em] text-foreground/70 group-hover:text-foreground transition-colors duration-700 text-center" dir="auto">
                       {translateCategory(cat.name, locale)}
                     </h2>
                   </Link>
@@ -148,24 +148,24 @@ export default async function CatalogPage(props: {
     : ['Living Room', 'Kitchen', 'Office', 'Villa'];
 
   return (
-    <main className={`w-full min-h-screen bg-[#faf9f8] text-[#2a2a2a] ${locale === 'he' ? assistantFont.className : ''}`}>
+    <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
       <CustomCursor />
       
       {/* Editorial Header */}
       <div className="w-full pt-48 pb-24 px-8 md:px-16 flex flex-col items-center text-center">
-        <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-[#2a2a2a] mb-10">
+        <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-foreground mb-10">
           {category ? translateCategory(category.name, locale) : tNav('catalog')}
         </h1>
-        <div className="w-8 h-[1px] bg-[#2a2a2a]/20 mb-24" />
+        <div className="w-8 h-[1px] bg-foreground/20 mb-24" />
 
         {/* Emotion/Mood Filters */}
-        <div className={`w-full max-w-6xl flex flex-col md:flex-row justify-between gap-16 text-xs uppercase tracking-[0.2em] font-light text-[#2a2a2a]/50 ${locale === 'he' ? 'md:flex-row-reverse' : ''}`}>
+        <div className={`w-full max-w-6xl flex flex-col md:flex-row justify-between gap-16 text-xs uppercase tracking-[0.2em] font-light text-muted-foreground ${locale === 'he' ? 'md:flex-row-reverse' : ''}`}>
           
           <div className="flex flex-col gap-6">
             <span className="text-[9px] tracking-[0.4em] opacity-40">{locale === 'he' ? 'סינון לפי אווירה' : 'Mood'}</span>
             <div className={`flex flex-wrap gap-8 ${locale === 'he' ? 'justify-end md:justify-start' : 'justify-start'}`}>
               {moods.map((m, i) => (
-                <button key={i} className="hover:text-[#2a2a2a] transition-colors duration-700">{m}</button>
+                <button key={i} className="hover:text-foreground transition-colors duration-700">{m}</button>
               ))}
             </div>
           </div>
@@ -174,7 +174,7 @@ export default async function CatalogPage(props: {
             <span className="text-[9px] tracking-[0.4em] opacity-40">{locale === 'he' ? 'קנה לפי חלל' : 'Space'}</span>
             <div className={`flex flex-wrap gap-8 ${locale === 'he' ? 'justify-end' : 'justify-start'}`}>
               {projects.map((p, i) => (
-                <button key={i} className="hover:text-[#2a2a2a] transition-colors duration-700">{p}</button>
+                <button key={i} className="hover:text-foreground transition-colors duration-700">{p}</button>
               ))}
             </div>
           </div>
@@ -186,7 +186,7 @@ export default async function CatalogPage(props: {
       <div className="w-full px-8 md:px-16 pb-40">
         <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 md:gap-x-24 gap-y-32 max-w-[1800px] mx-auto ${locale === 'he' ? 'rtl' : 'ltr'}`}>
           {products.length === 0 ? (
-            <div className="col-span-full py-32 text-center text-[#2a2a2a]/40 font-light tracking-widest uppercase text-sm">
+            <div className="col-span-full py-32 text-center text-muted-foreground font-light tracking-widest uppercase text-sm">
               {locale === 'he' ? 'לא נמצאו מוצרים בקולקציה זו.' : 'No pieces found in this collection.'}
             </div>
           ) : (
@@ -197,21 +197,21 @@ export default async function CatalogPage(props: {
                 prefetch={false}
                 className="group flex flex-col items-center cursor-none"
               >
-                {/* Floating Image Container (No Borders/Backgrounds) */}
-                <div className="w-full aspect-[4/5] relative flex items-center justify-center mb-10 overflow-hidden">
+                {/* Floating Image Container */}
+                <div className="w-full aspect-[4/5] relative flex items-center justify-center mb-10 overflow-hidden bg-neutral-100/5 dark:bg-neutral-900/50 rounded-sm">
                   {(product.images as string[])?.[0] ? (
                     <img
                       src={(product.images as string[])[0]}
                       alt={locale === 'he' && product.titleHe ? product.titleHe : product.title}
-                      className="w-full h-full object-contain mix-blend-multiply transition-transform duration-[1.5s] ease-[0.22,1,0.36,1] group-hover:scale-[1.04]"
+                      className="w-full h-full object-contain transition-transform duration-[1.5s] ease-[0.22,1,0.36,1] group-hover:scale-[1.04]"
                     />
                   ) : (
-                    <span className="text-[9px] uppercase tracking-widest text-[#2a2a2a]/20">Archive</span>
+                    <span className="text-[9px] uppercase tracking-widest text-muted-foreground/30">Archive</span>
                   )}
                 </div>
                 
                 {/* Minimal Typography (Only Name) */}
-                <h2 className="text-[11px] md:text-[13px] font-light uppercase tracking-[0.25em] text-[#2a2a2a]/70 group-hover:text-[#2a2a2a] transition-colors duration-700 text-center" dir="auto">
+                <h2 className="text-[11px] md:text-[13px] font-light uppercase tracking-[0.25em] text-foreground/70 group-hover:text-foreground transition-colors duration-700 text-center" dir="auto">
                   {locale === 'he' && product.titleHe ? product.titleHe : product.title}
                 </h2>
               </Link>
@@ -222,7 +222,7 @@ export default async function CatalogPage(props: {
       
       {/* Bottom return link */}
       <div className="w-full flex justify-center pb-32">
-        <Link href="/catalog" prefetch={false} className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-[#2a2a2a]/40 hover:text-[#2a2a2a] transition-colors duration-700 border-b border-transparent hover:border-[#2a2a2a]/30 pb-2">
+        <Link href="/catalog" prefetch={false} className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-muted-foreground hover:text-foreground transition-colors duration-700 border-b border-transparent hover:border-foreground/30 pb-2">
           {locale === 'he' ? 'חזור לקולקציות' : 'Return to Collections'}
         </Link>
       </div>
