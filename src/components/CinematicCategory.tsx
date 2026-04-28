@@ -26,7 +26,7 @@ export default function CinematicCategory({ id, name, image, locale }: Cinematic
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[100dvh] snap-start snap-always overflow-hidden group cursor-pointer"
+      className="relative w-full h-[100svh] snap-start snap-always overflow-hidden group cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

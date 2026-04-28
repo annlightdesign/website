@@ -63,7 +63,7 @@ export default async function CatalogPage(props: {
     });
 
     return (
-      <main className={`relative w-full min-h-screen ${locale === 'he' ? assistantFont.className : ''}`}>
+      <main className={`w-full h-[100svh] overflow-y-scroll overflow-x-hidden snap-y snap-mandatory no-scrollbar scroll-smooth ${locale === 'he' ? assistantFont.className : ''}`}>
         <CustomCursor />
         {categories.map(cat => {
           // Find the dedicated category image or fallback to the first product image

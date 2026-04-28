@@ -98,7 +98,7 @@ export default async function HomePage(props: { params: Promise<{ locale: string
   const dynamicFont = locale === 'he' ? { fontFamily: '"Oron Tavnit", "Oron", system-ui, sans-serif' } : undefined;
 
   return (
-    <main className="w-full min-h-[100dvh] md:h-[100dvh] md:overflow-y-scroll overflow-x-hidden md:snap-y md:snap-mandatory no-scrollbar scroll-smooth" style={dynamicFont}>
+    <main className="w-full h-[100svh] overflow-y-scroll overflow-x-hidden snap-y snap-mandatory no-scrollbar scroll-smooth" style={dynamicFont}>
       <HomeHero 
         title={finalTitle} 
         subtitle={finalSubtitle} 

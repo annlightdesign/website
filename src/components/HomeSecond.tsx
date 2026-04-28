@@ -61,7 +61,7 @@ export default function HomeSecond({
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[100dvh] snap-start snap-always flex flex-col justify-start items-center md:items-end p-8 pt-32 md:p-24 md:pt-40 overflow-hidden"
+      className="relative w-full h-[100svh] snap-start snap-always flex flex-col justify-start items-center md:items-end p-8 pt-32 md:p-24 md:pt-40 overflow-hidden"
     >
       <motion.img 
         src={wallpaperUrl2} 

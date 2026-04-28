@@ -15,7 +15,7 @@ export default function HomeHero({ title, subtitle, wallpaperUrl, locale, assist
   const easeCinematic = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section className="relative w-full h-[100dvh] snap-start snap-always flex flex-col items-center justify-center p-4 md:p-24 overflow-hidden bg-background">
+    <section className="relative w-full h-[100svh] snap-start snap-always flex flex-col items-center justify-center p-4 md:p-24 overflow-hidden bg-background">
       {wallpaperUrl && (
         <motion.img 
           src={wallpaperUrl} 
