@@ -59,7 +59,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
             <div key={project.id} className={`flex flex-col lg:flex-row w-full bg-background border-b border-border/40 ${!isEven ? 'lg:flex-row-reverse' : ''}`}>
               
               {/* Image Block: 55% width on Desktop */}
-              <Link href={`/projects/${project.id}`} className="w-full lg:w-[55%] relative bg-muted group overflow-hidden min-h-[50vh] lg:min-h-[75vh] block flex-shrink-0">
+              <Link href={`/projects/${project.id}`} prefetch={false} className="w-full lg:w-[55%] relative bg-muted group overflow-hidden min-h-[50vh] lg:min-h-[75vh] block flex-shrink-0">
                 <AnimatedInView delay={0.1} yOffset={30} className="w-full h-full absolute inset-0">
                   {mainImg ? (
                     <img
@@ -124,6 +124,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
                   {/* Mobile-only View Project Button (Desktop handles it via image hover) */}
                   <Link 
                     href={`/projects/${project.id}`}
+                    prefetch={false}
                     className="lg:hidden mt-16 px-8 py-4 border border-border text-xs uppercase tracking-[0.2em] hover:text-background hover:bg-foreground transition-colors duration-500 w-fit"
                   >
                     {t('viewProject')}

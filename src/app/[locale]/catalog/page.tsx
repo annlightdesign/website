@@ -51,13 +51,13 @@ export default async function CatalogPage(props: {
               </h3>
               <ul className={`space-y-4 text-[15px] font-light text-muted-foreground w-full break-normal ${locale === 'he' ? 'text-right' : 'text-left'}`} dir={locale === 'he' ? 'rtl' : 'ltr'}>
                 <li>
-                  <Link href="/catalog" className={`block hover:text-foreground transition-colors duration-300 ${!categoryId ? 'text-foreground font-medium tracking-wide' : 'hover:translate-x-1 hover:rtl:-translate-x-1'}`}>
+                  <Link href="/catalog" prefetch={false} className={`block hover:text-foreground transition-colors duration-300 ${!categoryId ? 'text-foreground font-medium tracking-wide' : 'hover:translate-x-1 hover:rtl:-translate-x-1'}`}>
                     {locale === 'he' ? 'נמכרים ביותר' : 'Top Selling'}
                   </Link>
                 </li>
                 {categories.map((cat) => (
                   <li key={cat.id}>
-                    <Link href={`/catalog?category=${cat.id}`} scroll={false} className={`block hover:text-foreground transition-colors duration-300 ${categoryId === cat.id ? 'text-foreground font-medium tracking-wide' : 'hover:translate-x-1 hover:rtl:-translate-x-1'}`}>
+                    <Link href={`/catalog?category=${cat.id}`} prefetch={false} scroll={false} className={`block hover:text-foreground transition-colors duration-300 ${categoryId === cat.id ? 'text-foreground font-medium tracking-wide' : 'hover:translate-x-1 hover:rtl:-translate-x-1'}`}>
                       {translateCategory(cat.name, locale)}
                     </Link>
                   </li>
@@ -83,7 +83,7 @@ export default async function CatalogPage(props: {
             <p className="text-muted-foreground text-sm col-span-full py-20 text-center border-dashed border-2 border-border rounded-lg">No products found in the catalog.</p>
           ) : (
             products.map((product) => (
-              <Link key={product.id} href={`/catalog/product/${product.id}`} className="group flex flex-col gap-3 cursor-pointer">
+              <Link key={product.id} href={`/catalog/product/${product.id}`} prefetch={false} className="group flex flex-col gap-3 cursor-pointer">
                 <div className="aspect-[4/5] bg-muted relative overflow-hidden flex items-center justify-center text-muted-foreground">
                   {(product.images as string[])?.[0] ? (
                     <img
