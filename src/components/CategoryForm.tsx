@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface CategoryFormProps {
-  existingCategory?: { id: number; name: string; nameHe?: string | null };
+  existingCategory?: { id: number; name: string; nameHe?: string | null; enabled?: boolean };
   trigger?: ReactNode;
   externalOpen?: boolean;
   onExternalClose?: () => void;
@@ -23,6 +23,7 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState(existingCategory?.name || '');
   const [nameHe, setNameHe] = useState(existingCategory?.nameHe || '');
+  const [enabled, setEnabled] = useState(existingCategory?.enabled ?? true);
 
   useEffect(() => {
     setMounted(true);
@@ -51,7 +52,7 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
     const res = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, nameHe })
+      body: JSON.stringify({ name, nameHe, enabled })
     });
 
     if (res.ok) {
@@ -60,6 +61,7 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
       if (!isEdit) {
         setName('');
         setNameHe('');
+        setEnabled(true);
       }
       window.location.reload();
     } else {
@@ -81,6 +83,7 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
     } else {
       setName(existingCategory.name);
       setNameHe(existingCategory.nameHe || '');
+      setEnabled(existingCategory.enabled ?? true);
     }
   };
 
@@ -115,6 +118,13 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
               <div className="flex flex-col gap-2">
                 <label className="text-xs uppercase tracking-widest font-semibold text-muted-foreground">Category Name (Hebrew)</label>
                 <input placeholder="e.g. תאורת פנים" value={nameHe} onChange={e => setNameHe(e.target.value)} className="border border-border bg-background p-3 outline-none text-right" dir="auto" />
+              </div>
+
+              <div className="flex items-center gap-2 mt-2">
+                <input type="checkbox" id="enabled-checkbox" checked={enabled} onChange={e => setEnabled(e.target.checked)} className="w-4 h-4 cursor-pointer" />
+                <label htmlFor="enabled-checkbox" className="text-xs uppercase tracking-widest font-semibold text-muted-foreground cursor-pointer">
+                  Category Enabled (Visible in Catalog)
+                </label>
               </div>
 
               <button disabled={loading || !name.trim()} type="submit" className="bg-accent text-accent-foreground p-4 mt-2 uppercase font-medium tracking-widest w-full font-sans transition-opacity hover:opacity-90 disabled:opacity-50">

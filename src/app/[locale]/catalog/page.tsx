@@ -41,10 +41,14 @@ export default async function CatalogPage(props: {
   const categoryId = searchParams.category ? parseInt(searchParams.category) : undefined;
   const t = await getTranslations('Navigation');
 
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    where: { enabled: true }
+  });
 
   const products = await prisma.product.findMany({
-    where: categoryId ? { categories: { some: { id: categoryId } } } : undefined,
+    where: { 
+      categories: { some: { id: categoryId, enabled: true } },
+    },
     include: { categories: true, brand: true },
     orderBy: [{ order: 'asc' }, { createdAt: 'desc' }]
   });

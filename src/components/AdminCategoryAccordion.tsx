@@ -10,7 +10,7 @@ import ConfirmModal from "@/components/ConfirmModal";
 import { toast } from "sonner";
 
 interface AdminCategoryAccordionProps {
-  category?: { id: number; name: string; nameHe?: string | null };
+  category?: { id: number; name: string; nameHe?: string | null; enabled?: boolean };
   title: string;
   count: number;
   products: Product[];
@@ -119,6 +119,7 @@ export default function AdminCategoryAccordion({
           <h2 className="text-[15px] font-medium tracking-wider uppercase flex items-center gap-2">
             <span>{category?.name || title}</span>
             {category?.nameHe && <span className="text-muted-foreground ml-1 dir-rtl opacity-75">/ {category.nameHe}</span>}
+            {category && category.enabled === false && <span className="text-red-500 text-[10px] ml-1 font-bold border border-red-500/50 px-1.5 py-0.5 rounded-sm">DISABLED</span>}
             <span className="text-muted-foreground text-xs ml-2 normal-case tracking-normal font-light">({count} item{count !== 1 ? 's' : ''})</span>
           </h2>
         </div>

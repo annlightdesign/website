@@ -31,6 +31,7 @@ model Category {
   children  Category[] @relation("SubCategories")
   products  Product[]  @relation("ProductCategories")
   order     Int        @default(0)
+  enabled   Boolean    @default(true)
 }
 
 model Brand {

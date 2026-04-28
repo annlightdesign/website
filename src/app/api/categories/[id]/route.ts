@@ -6,7 +6,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const { id: paramId } = await params;
     const id = parseInt(paramId, 10);
     const body = await req.json();
-    const { name, nameHe } = body;
+    const { name, nameHe, enabled } = body;
     
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -17,6 +17,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       data: {
         name,
         nameHe: nameHe || null,
+        ...(enabled !== undefined && { enabled }),
       }
     });
 
