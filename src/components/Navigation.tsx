@@ -1,12 +1,13 @@
 "use client";
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Link, usePathname, routing } from '@/i18n/routing';
 import { Menu, Search, ShoppingBag } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Navigation() {
   const t = useTranslations('Navigation');
+  const locale = useLocale();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -67,7 +68,7 @@ export default function Navigation() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-10 text-sm font-medium uppercase text-foreground">
+        <nav className={`hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-10 text-sm font-medium uppercase text-foreground ${locale === 'he' ? 'flex-row-reverse' : ''}`}>
           <Link href="/catalog" className={navLinkClass}>{t('catalog')}</Link>
           <Link href="/projects" className={navLinkClass}>{t('projects')}</Link>
           <Link href="/brands" className={navLinkClass}>{t('brands')}</Link>
