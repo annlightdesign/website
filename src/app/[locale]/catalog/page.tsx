@@ -63,27 +63,67 @@ export default async function CatalogPage(props: {
     });
 
     return (
-      <main className={`w-full h-[100svh] overflow-y-scroll overflow-x-hidden snap-y snap-mandatory no-scrollbar scroll-smooth ${locale === 'he' ? assistantFont.className : ''}`}>
+      <main className={`w-full min-h-screen bg-[#faf9f8] text-[#2a2a2a] ${locale === 'he' ? assistantFont.className : ''}`}>
         <CustomCursor />
-        {categories.map(cat => {
-          // Find the dedicated category image or fallback to the first product image
-          let imgUrl = cat.image || null;
-          const products = cat.products || [];
-          if (!imgUrl && products.length > 0 && products[0].images) {
-             const imgs = products[0].images as string[];
-             if (imgs.length > 0) imgUrl = imgs[0];
-          }
+        
+        {/* Editorial Header */}
+        <div className="w-full pt-48 pb-24 px-8 md:px-16 flex flex-col items-center text-center">
+          <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-[#2a2a2a] mb-10">
+            {tNav('catalog')}
+          </h1>
+          <div className="w-8 h-[1px] bg-[#2a2a2a]/20 mb-24" />
           
-          return (
-            <CinematicCategory 
-              key={cat.id} 
-              id={cat.id}
-              name={translateCategory(cat.name, locale)} 
-              image={imgUrl}
-              locale={locale}
-            />
-          );
-        })}
+          <p className="text-xs uppercase tracking-[0.2em] font-light text-[#2a2a2a]/40 max-w-2xl mx-auto leading-relaxed">
+            {locale === 'he' ? 'חקור את קולקציות התאורה האדריכלית שלנו.' : 'Explore our architectural lighting collections.'}
+          </p>
+        </div>
+
+        {/* Collections Grid */}
+        <div className="w-full px-8 md:px-16 pb-40">
+          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 md:gap-x-24 gap-y-32 max-w-[1800px] mx-auto ${locale === 'he' ? 'rtl' : 'ltr'}`}>
+            {categories.length === 0 ? (
+              <div className="col-span-full py-32 text-center text-[#2a2a2a]/40 font-light tracking-widest uppercase text-sm">
+                {locale === 'he' ? 'לא נמצאו קולקציות.' : 'No collections found.'}
+              </div>
+            ) : (
+              categories.map(cat => {
+                let imgUrl = cat.image || null;
+                const products = cat.products || [];
+                if (!imgUrl && products.length > 0 && products[0].images) {
+                   const imgs = products[0].images as string[];
+                   if (imgs.length > 0) imgUrl = imgs[0];
+                }
+                
+                return (
+                  <Link 
+                    key={cat.id} 
+                    href={`/catalog?category=${cat.id}`} 
+                    prefetch={false}
+                    className="group flex flex-col items-center cursor-none"
+                  >
+                    {/* Floating Image Container */}
+                    <div className="w-full aspect-[4/5] relative flex items-center justify-center mb-10 overflow-hidden">
+                      {imgUrl ? (
+                        <img
+                          src={imgUrl}
+                          alt={translateCategory(cat.name, locale)}
+                          className="w-full h-full object-contain mix-blend-multiply transition-transform duration-[1.5s] ease-[0.22,1,0.36,1] group-hover:scale-[1.04]"
+                        />
+                      ) : (
+                        <span className="text-[9px] uppercase tracking-widest text-[#2a2a2a]/20">Archive</span>
+                      )}
+                    </div>
+                    
+                    {/* Minimal Typography */}
+                    <h2 className="text-[11px] md:text-[13px] font-light uppercase tracking-[0.25em] text-[#2a2a2a]/70 group-hover:text-[#2a2a2a] transition-colors duration-700 text-center" dir="auto">
+                      {translateCategory(cat.name, locale)}
+                    </h2>
+                  </Link>
+                );
+              })
+            )}
+          </div>
+        </div>
       </main>
     );
   }
