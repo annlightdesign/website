@@ -32,6 +32,7 @@ model Category {
   products  Product[]  @relation("ProductCategories")
   order     Int        @default(0)
   enabled   Boolean    @default(true)
+  image     String?    // Cloudinary URL for cinematic catalog background
 }
 
 model Brand {

@@ -10,7 +10,7 @@ import ConfirmModal from "@/components/ConfirmModal";
 import { toast } from "sonner";
 
 interface AdminCategoryAccordionProps {
-  category?: { id: number; name: string; nameHe?: string | null; enabled?: boolean };
+  category?: { id: number; name: string; nameHe?: string | null; enabled?: boolean; image?: string | null };
   title: string;
   count: number;
   products: Product[];

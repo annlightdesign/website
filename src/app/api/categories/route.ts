@@ -15,7 +15,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, nameHe, enabled } = body;
+    const { name, nameHe, parentId, enabled, image } = body;
     
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -25,7 +25,9 @@ export async function POST(req: Request) {
       data: {
         name,
         nameHe: nameHe || null,
+        parentId: parentId || null,
         enabled: enabled !== undefined ? enabled : true,
+        image: image || null,
       }
     });
 

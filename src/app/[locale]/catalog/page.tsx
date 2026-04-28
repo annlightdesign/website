@@ -44,10 +44,10 @@ export default async function CatalogPage(props: {
       <main className={`relative w-full h-screen snap-y snap-mandatory overflow-y-scroll ${locale === 'he' ? assistantFont.className : ''}`}>
         <CustomCursor />
         {categories.map(cat => {
-          // Find the first product image to use as the background
+          // Find the dedicated category image or fallback to the first product image
+          let imgUrl = cat.image || null;
           const products = cat.products || [];
-          let imgUrl = null;
-          if (products.length > 0 && products[0].images) {
+          if (!imgUrl && products.length > 0 && products[0].images) {
              const imgs = products[0].images as string[];
              if (imgs.length > 0) imgUrl = imgs[0];
           }

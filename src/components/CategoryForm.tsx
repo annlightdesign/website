@@ -2,11 +2,11 @@
 
 import { useState, useEffect, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
+import { Upload, X, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface CategoryFormProps {
-  existingCategory?: { id: number; name: string; nameHe?: string | null; enabled?: boolean };
+  existingCategory?: { id: number; name: string; nameHe?: string | null; enabled?: boolean; image?: string | null };
   trigger?: ReactNode;
   externalOpen?: boolean;
   onExternalClose?: () => void;
@@ -24,6 +24,9 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
   const [name, setName] = useState(existingCategory?.name || '');
   const [nameHe, setNameHe] = useState(existingCategory?.nameHe || '');
   const [enabled, setEnabled] = useState(existingCategory?.enabled ?? true);
+  const [image, setImage] = useState<string | null>(existingCategory?.image || null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -52,7 +55,7 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
     const res = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, nameHe, enabled })
+      body: JSON.stringify({ name, nameHe, enabled, image })
     });
 
     if (res.ok) {
@@ -62,6 +65,7 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
         setName('');
         setNameHe('');
         setEnabled(true);
+        setImage(null);
       }
       window.location.reload();
     } else {
@@ -80,10 +84,51 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
     if (!existingCategory) {
       setName('');
       setNameHe('');
+      setImage(null);
     } else {
       setName(existingCategory.name);
       setNameHe(existingCategory.nameHe || '');
       setEnabled(existingCategory.enabled ?? true);
+      setImage(existingCategory.image || null);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    setUploadingImage(true);
+    try {
+      const data = new FormData();
+      data.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: data });
+      if (!res.ok) throw new Error(await res.text());
+      const { url } = await res.json();
+      setImage(url);
+    } catch (err: any) {
+      toast.error("Upload failed.", { description: err.message });
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      setUploadingImage(true);
+      try {
+        const data = new FormData();
+        data.append('file', file);
+        const res = await fetch('/api/upload', { method: 'POST', body: data });
+        if (!res.ok) throw new Error(await res.text());
+        const { url } = await res.json();
+        setImage(url);
+      } catch (err: any) {
+        toast.error("Upload failed.", { description: err.message });
+      } finally {
+        setUploadingImage(false);
+      }
     }
   };
 
@@ -127,7 +172,36 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
                 </label>
               </div>
 
-              <button disabled={loading || !name.trim()} type="submit" className="bg-accent text-accent-foreground p-4 mt-2 uppercase font-medium tracking-widest w-full font-sans transition-opacity hover:opacity-90 disabled:opacity-50">
+              <div className="flex flex-col gap-2 mt-2 border-t border-border pt-4">
+                <label className="text-xs uppercase tracking-widest font-semibold text-muted-foreground flex justify-between">
+                  <span>Cinematic Wallpaper</span>
+                  {image && (
+                     <button type="button" onClick={() => setImage(null)} className="text-red-500 hover:text-red-400 flex items-center gap-1">
+                       <Trash2 className="w-3 h-3" /> Remove
+                     </button>
+                  )}
+                </label>
+                {image ? (
+                  <div className="w-full aspect-[21/9] bg-muted relative rounded-sm overflow-hidden border border-border">
+                    <img src={image} alt="Category Wallpaper" className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <label 
+                    className={`border p-6 flex flex-col items-center justify-center border-dashed transition-all duration-200 gap-3 cursor-pointer hover:bg-muted/5 ${isDragging ? 'border-foreground bg-muted/10' : 'border-border'}`}
+                    onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                    onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+                    onDrop={handleDrop}
+                  >
+                    <Upload className={`w-6 h-6 ${isDragging ? 'text-foreground' : 'text-muted-foreground'}`} />
+                    <span className="text-muted-foreground font-semibold uppercase tracking-widest text-[10px] text-center">
+                      {uploadingImage ? 'Uploading...' : (isDragging ? 'Drop Image Now' : 'Upload High-Res Wallpaper')}
+                    </span>
+                    <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage || loading} className="hidden" />
+                  </label>
+                )}
+              </div>
+
+              <button disabled={loading || uploadingImage || !name.trim()} type="submit" className="bg-accent text-accent-foreground p-4 mt-2 uppercase font-medium tracking-widest w-full font-sans transition-opacity hover:opacity-90 disabled:opacity-50">
                 {loading ? "Processing..." : (existingCategory ? "Save Changes" : "Create Category")}
               </button>
             </form>
