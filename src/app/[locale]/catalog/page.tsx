@@ -22,6 +22,23 @@ export default async function CatalogPage(props: {
   searchParams: Promise<{ category?: string }>
 }) {
   const { locale } = await props.params;
+  const t = await getTranslations('Catalog');
+
+  return (
+    <main className={`container mx-auto px-6 py-32 min-h-[70vh] flex flex-col items-center justify-center text-center ${locale === 'he' ? assistantFont.className : ''}`}>
+      <div className="max-w-3xl mx-auto space-y-8">
+        <h1 className="text-4xl md:text-5xl uppercase font-light tracking-[0.2em] text-foreground">
+          {t('title')}
+        </h1>
+        <div className="w-16 h-[1px] bg-foreground/20 mx-auto"></div>
+        <p className="text-muted-foreground text-lg md:text-xl font-light leading-relaxed">
+          {t('description')}
+        </p>
+      </div>
+    </main>
+  );
+
+  /* === RESERVED CINEMATIC CATALOG LOGIC ===
   const searchParams = await props.searchParams;
   const categoryId = searchParams.category ? parseInt(searchParams.category) : undefined;
   
@@ -171,4 +188,5 @@ export default async function CatalogPage(props: {
       </div>
     </main>
   );
+  === END CINEMATIC LOGIC === */
 }
