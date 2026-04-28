@@ -20,26 +20,11 @@ export default async function CatalogPage(props: {
   searchParams: Promise<{ category?: string }>
 }) {
   const { locale } = await props.params;
-  const t = await getTranslations('Catalog');
-
-  return (
-    <main className={`container mx-auto px-6 py-32 min-h-[70vh] flex flex-col items-center justify-center text-center ${locale === 'he' ? assistantFont.className : ''}`}>
-      <div className="max-w-3xl mx-auto space-y-8">
-        <h1 className="text-4xl md:text-5xl uppercase font-light tracking-[0.2em] text-foreground">
-          {t('title')}
-        </h1>
-        <div className="w-16 h-[1px] bg-foreground/20 mx-auto"></div>
-        <p className="text-muted-foreground text-lg md:text-xl font-light leading-relaxed">
-          {t('description')}
-        </p>
-      </div>
-    </main>
-  );
-
-  /* === RESERVED PREVIOUS CATALOG LOGIC ===
   const searchParams = await props.searchParams;
   const categoryId = searchParams.category ? parseInt(searchParams.category) : undefined;
-  const t = await getTranslations('Navigation');
+  
+  const t = await getTranslations('Catalog');
+  const tNav = await getTranslations('Navigation');
 
   const categories = await prisma.category.findMany({
     where: { enabled: true }
@@ -54,8 +39,8 @@ export default async function CatalogPage(props: {
   });
 
   return (
-    <main className={`container mx-auto px-6 py-12 pt-32 ${locale === 'he' ? assistantFont.className : ''}`}>
-      <h1 className={`text-[40px] uppercase mb-12 ${locale === 'he' ? 'text-right font-extralight tracking-[0.2em]' : 'font-sans font-light tracking-[0.25em]'}`}>{t('catalog')}</h1>
+    <main className={`container mx-auto px-6 py-12 pt-32 min-h-screen ${locale === 'he' ? assistantFont.className : ''}`}>
+      <h1 className={`text-[40px] uppercase mb-12 ${locale === 'he' ? 'text-right font-extralight tracking-[0.2em]' : 'font-sans font-light tracking-[0.25em]'}`}>{tNav('catalog')}</h1>
 
       <div className={`flex flex-col gap-12 ${locale === 'he' ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
         <aside className="w-full md:w-64 flex-shrink-0">
@@ -121,5 +106,4 @@ export default async function CatalogPage(props: {
       </div>
     </main>
   );
-  === END PREVIOUS LOGIC === */
 }
