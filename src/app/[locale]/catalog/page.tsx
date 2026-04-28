@@ -105,7 +105,7 @@ export default async function CatalogPage(props: {
                       {imgUrl ? (
                         <img
                           src={imgUrl}
-                          alt={translateCategory(cat.name, locale)}
+                          alt={locale === 'he' && cat.nameHe ? cat.nameHe : translateCategory(cat.name, locale)}
                           className="w-full h-full object-contain transition-transform duration-[1.5s] ease-[0.22,1,0.36,1] group-hover:scale-[1.04]"
                         />
                       ) : (
@@ -114,8 +114,8 @@ export default async function CatalogPage(props: {
                     </div>
                     
                     {/* Minimal Typography */}
-                    <h2 className="text-[11px] md:text-[13px] font-light uppercase tracking-[0.25em] text-foreground/70 group-hover:text-foreground transition-colors duration-700 text-center" dir="auto">
-                      {translateCategory(cat.name, locale)}
+                    <h2 className="text-sm md:text-base font-light uppercase tracking-[0.2em] text-foreground/80 group-hover:text-foreground transition-colors duration-700 text-center" dir="auto">
+                      {locale === 'he' && cat.nameHe ? cat.nameHe : translateCategory(cat.name, locale)}
                     </h2>
                   </Link>
                 );
@@ -152,7 +152,7 @@ export default async function CatalogPage(props: {
       {/* Editorial Header */}
       <div className="w-full pt-48 pb-24 px-8 md:px-16 flex flex-col items-center text-center">
         <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-foreground mb-10">
-          {category ? translateCategory(category.name, locale) : tNav('catalog')}
+          {category ? (locale === 'he' && category.nameHe ? category.nameHe : translateCategory(category.name, locale)) : tNav('catalog')}
         </h1>
         <div className="w-8 h-[1px] bg-foreground/20 mb-24" />
 
@@ -209,7 +209,7 @@ export default async function CatalogPage(props: {
                 </div>
                 
                 {/* Minimal Typography (Only Name) */}
-                <h2 className="text-[11px] md:text-[13px] font-light uppercase tracking-[0.25em] text-foreground/70 group-hover:text-foreground transition-colors duration-700 text-center" dir="auto">
+                <h2 className="text-sm md:text-base font-light uppercase tracking-[0.2em] text-foreground/80 group-hover:text-foreground transition-colors duration-700 text-center" dir="auto">
                   {locale === 'he' && product.titleHe ? product.titleHe : product.title}
                 </h2>
               </Link>
