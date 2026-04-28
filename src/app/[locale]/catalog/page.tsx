@@ -24,7 +24,9 @@ export default async function CatalogPage(props: {
   const { locale } = await props.params;
   const t = await getTranslations('Catalog');
 
-  const isComingSoon = true;
+  const setting = await prisma.siteSetting.findUnique({ where: { key: 'construction_catalog' } });
+  const isComingSoon = setting?.value === 'true';
+  
   if (isComingSoon) {
     return (
       <main className={`container mx-auto px-6 py-32 min-h-[70vh] flex flex-col items-center justify-center text-center ${locale === 'he' ? assistantFont.className : ''}`}>

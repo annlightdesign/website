@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { prisma } from '@/lib/prisma';
 import ArchitectsClientForm from './ArchitectsClientForm';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -22,6 +23,23 @@ export default async function ArchitectsPage({ params }: { params: Promise<{ loc
     privacyPolicy: t('privacyPolicy'),
     sendRequest: t('sendRequest')
   };
+
+  const setting = await prisma.siteSetting.findUnique({ where: { key: 'construction_architects' } });
+  if (setting?.value === 'true') {
+    return (
+      <main className="container mx-auto px-6 py-32 min-h-[70vh] flex flex-col items-center justify-center text-center z-10 relative">
+        <div className="max-w-3xl mx-auto space-y-8">
+          <h1 className="text-4xl md:text-5xl uppercase font-light tracking-[0.2em] text-foreground">
+            {locale === 'he' ? 'אדריכלים - בקרוב' : 'Architects - Coming Soon'}
+          </h1>
+          <div className="w-16 h-[1px] bg-foreground/20 mx-auto"></div>
+          <p className="text-muted-foreground text-lg md:text-xl font-light leading-relaxed">
+            {locale === 'he' ? 'עמוד האדריכלים יעלה לאוויר ממש בקרוב.' : 'Our dedicated architects portal will be available shortly.'}
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="relative z-10 w-full min-h-screen bg-background">

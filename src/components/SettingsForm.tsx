@@ -31,7 +31,11 @@ export default function SettingsForm() {
     homepage_wallpaper_2: '',
     homepage_wallpaper_3: '',
     contact_wallpaper: '',
-    project_title_size: '72'
+    project_title_size: '72',
+    construction_catalog: 'true',
+    construction_brands: 'true',
+    construction_architects: 'true',
+    construction_projects: 'true'
   });
 
   useEffect(() => {
@@ -58,7 +62,11 @@ export default function SettingsForm() {
         homepage_wallpaper_2: data.homepage_wallpaper_2 || '',
         homepage_wallpaper_3: data.homepage_wallpaper_3 || '',
         contact_wallpaper: data.contact_wallpaper || '',
-        project_title_size: data.project_title_size || '72'
+        project_title_size: data.project_title_size || '72',
+        construction_catalog: data.construction_catalog || 'false',
+        construction_brands: data.construction_brands || 'false',
+        construction_architects: data.construction_architects || 'false',
+        construction_projects: data.construction_projects || 'false'
       });
     });
   }, []);
@@ -229,6 +237,9 @@ export default function SettingsForm() {
                 </button>
                 <button type="button" onClick={() => setActiveTab('projects')} className={`text-left px-4 py-3 text-xs uppercase tracking-widest transition-colors border-l-2 ${activeTab === 'projects' ? 'bg-muted border-foreground font-bold' : 'border-transparent hover:bg-muted/50 text-muted-foreground'}`}>
                   Projects Page
+                </button>
+                <button type="button" onClick={() => setActiveTab('visibility')} className={`text-left px-4 py-3 text-xs uppercase tracking-widest transition-colors border-l-2 ${activeTab === 'visibility' ? 'bg-muted border-foreground font-bold' : 'border-transparent hover:bg-muted/50 text-muted-foreground'}`}>
+                  Page Visibility
                 </button>
               </div>
 
@@ -418,6 +429,35 @@ export default function SettingsForm() {
                         </label>
                         <input type="range" min="32" max="150" step="2" value={formData.project_title_size} onChange={e=>{setFormData({...formData, project_title_size: e.target.value}); setIsDirty(true);}} className="w-full accent-foreground cursor-pointer" />
                         <span className="text-[10px] text-muted-foreground uppercase mt-1 tracking-wider">Slide to dynamically scale the main title on individual project pages</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeTab === 'visibility' && (
+                    <div className="flex flex-col gap-5">
+                      <div className="flex flex-col gap-4">
+                        <h3 className="text-sm font-semibold uppercase tracking-widest border-b border-border pb-2">Under Construction Settings</h3>
+                        <p className="text-xs text-muted-foreground mb-4">Toggle these switches to hide pages from the public while you prepare content.</p>
+
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input type="checkbox" checked={formData.construction_catalog === 'true'} onChange={e => {setFormData({...formData, construction_catalog: e.target.checked ? 'true' : 'false'}); setIsDirty(true);}} className="w-5 h-5 accent-foreground cursor-pointer" />
+                          <span className="text-sm font-medium uppercase tracking-widest">Hide Catalog Page (Under Construction)</span>
+                        </label>
+                        
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input type="checkbox" checked={formData.construction_brands === 'true'} onChange={e => {setFormData({...formData, construction_brands: e.target.checked ? 'true' : 'false'}); setIsDirty(true);}} className="w-5 h-5 accent-foreground cursor-pointer" />
+                          <span className="text-sm font-medium uppercase tracking-widest">Hide Brands Page (Under Construction)</span>
+                        </label>
+
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input type="checkbox" checked={formData.construction_architects === 'true'} onChange={e => {setFormData({...formData, construction_architects: e.target.checked ? 'true' : 'false'}); setIsDirty(true);}} className="w-5 h-5 accent-foreground cursor-pointer" />
+                          <span className="text-sm font-medium uppercase tracking-widest">Hide Architects Page (Under Construction)</span>
+                        </label>
+
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input type="checkbox" checked={formData.construction_projects === 'true'} onChange={e => {setFormData({...formData, construction_projects: e.target.checked ? 'true' : 'false'}); setIsDirty(true);}} className="w-5 h-5 accent-foreground cursor-pointer" />
+                          <span className="text-sm font-medium uppercase tracking-widest">Hide Projects Page (Under Construction)</span>
+                        </label>
                       </div>
                     </div>
                   )}

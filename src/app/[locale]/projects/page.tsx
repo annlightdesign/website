@@ -17,6 +17,23 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
   const { locale } = await params;
   const t = await getTranslations('Projects');
   
+  const csSetting = await prisma.siteSetting.findUnique({ where: { key: 'construction_projects' } });
+  if (csSetting?.value === 'true') {
+    return (
+      <main className="container mx-auto px-6 py-32 min-h-[70vh] flex flex-col items-center justify-center text-center z-10 relative">
+        <div className="max-w-3xl mx-auto space-y-8">
+          <h1 className="text-4xl md:text-5xl uppercase font-light tracking-[0.2em] text-foreground">
+            {locale === 'he' ? 'פרויקטים - בקרוב' : 'Projects - Coming Soon'}
+          </h1>
+          <div className="w-16 h-[1px] bg-foreground/20 mx-auto"></div>
+          <p className="text-muted-foreground text-lg md:text-xl font-light leading-relaxed">
+            {locale === 'he' ? 'אנו מעדכנים כעת את גלריית הפרויקטים שלנו.' : 'We are currently updating our projects gallery.'}
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   const projects = await prisma.project.findMany({
     orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
   });
