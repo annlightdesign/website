@@ -75,7 +75,7 @@ export default function AboutSection({
   return (
     <section
       ref={containerRef}
-      className={`relative w-full ${wallpaperUrl2 ? 'h-[100dvh]' : 'min-h-[50dvh] bg-background'} snap-start snap-always flex flex-col items-center justify-center p-8 pt-24 overflow-hidden`}
+      className={`relative w-full ${wallpaperUrl2 ? 'min-h-[100dvh]' : 'min-h-[50dvh] bg-background'} snap-start snap-always flex flex-col items-center justify-center p-8 pt-24 overflow-hidden`}
     >
       {/* Infinite Slow Parallax/Zoom Background */}
       {wallpaperUrl2 && (
