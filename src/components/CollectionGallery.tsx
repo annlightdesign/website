@@ -65,7 +65,7 @@ export default function CollectionGallery({ collections, locale, categoryName, p
         <span className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-muted-foreground mb-6">
           {locale === 'he' ? 'משפחות מוצרים' : 'Product Families'}
         </span>
-        <h1 className="text-5xl md:text-7xl font-normal uppercase tracking-widest text-foreground mb-10 leading-tight">
+        <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-foreground mb-10">
           {categoryName}
         </h1>
         <div className="w-8 h-[1px] bg-foreground/20" />

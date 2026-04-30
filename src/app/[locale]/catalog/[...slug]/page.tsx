@@ -152,7 +152,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
             </Link>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-[6vw] font-normal uppercase tracking-[0.2em] md:tracking-[0.3em] text-foreground mb-10 leading-tight mt-10">
+          <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-foreground mb-10 mt-10">
             {locale === 'he' && targetCategory.nameHe ? targetCategory.nameHe : translateCategory(targetCategory.name, locale)}
           </h1>
           <div className="w-8 h-[1px] bg-foreground/20 mb-16" />
