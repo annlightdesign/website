@@ -179,7 +179,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
                       <img
                         src={(product.images as string[])[0]}
                         alt={locale === 'he' && product.titleHe ? product.titleHe : product.title}
-                        className="w-full h-full object-contain transition-transform duration-[1.5s] ease-[0.22,1,0.36,1] group-hover:scale-[1.04]"
+                        className="w-full h-full object-cover transition-transform duration-[1.5s] ease-[0.22,1,0.36,1] group-hover:scale-[1.04]"
                       />
                     ) : (
                       <span className="text-[9px] uppercase tracking-widest text-muted-foreground/30">Archive</span>
