@@ -148,6 +148,7 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
   const [isPending, startTransition] = useTransition();
   const lastDragTime = React.useRef(0);
   const fetchQueue = React.useRef<Promise<void>>(Promise.resolve());
+  const dragStartContainerRef = React.useRef<string | null>(null);
 
   useEffect(() => {
     // Only update from server props if we are not pending a transition
@@ -158,8 +159,16 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
     }
   }, [initialCategories, isPending]);
 
-  const handleDragStart = () => {
+  const handleDragStart = (event: DragStartEvent) => {
     lastDragTime.current = Date.now();
+    const { active } = event;
+
+    if (String(active.id).startsWith('product-')) {
+      const container = active.data.current?.categoryId ? `category-${active.data.current.categoryId}` : 'uncategorized';
+      dragStartContainerRef.current = container;
+    } else {
+      dragStartContainerRef.current = null;
+    }
   };
 
   const sensors = useSensors(
@@ -279,7 +288,7 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
       const newIndex = productsArray.findIndex((p: any) => `product-${p.id}` === overId);
 
       // Check if container changed (from start of drag to drop location)
-      const originalContainer = active.data.current?.categoryId ? `category-${active.data.current.categoryId}` : 'uncategorized';
+      const originalContainer = dragStartContainerRef.current || 'uncategorized';
       const isCrossContainer = originalContainer !== activeContainer;
 
       // Only perform arrayMove and reorder if it's within the SAME container, OR if the state has fully resolved
