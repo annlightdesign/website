@@ -141,11 +141,11 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
           ::-webkit-scrollbar { display: none; }
           * { -ms-overflow-style: none; scrollbar-width: none; }
         `}</style>
-        <div className="w-full pt-16 pb-12 px-8 md:px-16 flex flex-col items-center text-center relative">
+        <div className="w-full pt-32 pb-12 px-8 md:px-16 flex flex-col items-center text-center relative">
           <div className="w-full max-w-[1800px] mx-auto flex">
             <Link 
               href={backHref} 
-              className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors mb-8 ${locale === 'he' ? 'ml-auto flex-row-reverse' : ''}`}
+              className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors mb-12 ${locale === 'he' ? 'ml-auto flex-row-reverse' : ''}`}
             >
               {locale === 'he' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
               {t('back')}
