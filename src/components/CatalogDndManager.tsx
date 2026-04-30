@@ -189,18 +189,35 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
 
     if (activeId.startsWith('category-')) return; // Ignore category drags over other categories
 
-    const activeContainer = findContainer(activeId);
-    const overContainer = findContainer(overId);
-
-    if (!activeContainer || !overContainer || activeContainer === overContainer) {
-      return;
-    }
-
     setCategories((prev: any[]) => {
+      // ALWAYS calculate containers dynamically inside the state setter using the absolute latest `prev` state!
+      const findContainerInPrev = (id: string) => {
+        if (id.startsWith('category-') || id === 'uncategorized') return id;
+        const prodIdNum = parseInt(id.replace('product-', ''), 10);
+        for (const cat of prev) {
+          if (cat.products.find((p: any) => p.id === prodIdNum)) {
+            return cat.category ? `category-${cat.category.id}` : 'uncategorized';
+          }
+        }
+        return null;
+      };
+
+      const activeContainer = findContainerInPrev(activeId);
+      let overContainer = overId;
+      if (overId.startsWith('product-')) {
+        overContainer = findContainerInPrev(overId) || 'uncategorized';
+      }
+
+      if (!activeContainer || !overContainer || activeContainer === overContainer) {
+        return prev;
+      }
+
       const activeItems = prev.find((c: any) => (c.category ? `category-${c.category.id}` : 'uncategorized') === activeContainer)?.products || [];
       const overItems = prev.find((c: any) => (c.category ? `category-${c.category.id}` : 'uncategorized') === overContainer)?.products || [];
       const activeIndex = activeItems.findIndex((p: any) => `product-${p.id}` === activeId);
       let overIndex = overItems.findIndex((p: any) => `product-${p.id}` === overId);
+
+      if (activeIndex === -1) return prev; // GUARD: Prevent corrupting state!
 
       const itemToMove = activeItems[activeIndex];
 
@@ -261,7 +278,12 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
       const oldIndex = productsArray.findIndex((p: any) => `product-${p.id}` === activeId);
       const newIndex = productsArray.findIndex((p: any) => `product-${p.id}` === overId);
 
-      if (oldIndex !== newIndex && newIndex !== -1) {
+      // Check if container changed (from start of drag to drop location)
+      const originalContainer = active.data.current?.categoryId ? `category-${active.data.current.categoryId}` : 'uncategorized';
+      const isCrossContainer = originalContainer !== activeContainer;
+
+      // Only perform arrayMove and reorder if it's within the SAME container, OR if the state has fully resolved
+      if (oldIndex !== -1 && oldIndex !== newIndex && newIndex !== -1) {
         const newArray = arrayMove(productsArray, oldIndex, newIndex);
         setCategories((prev: any[]) => {
           const newCats = [...prev];
@@ -286,9 +308,7 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
         });
       }
 
-      // Check if container changed (from start of drag to drop location)
-      const originalContainer = active.data.current?.categoryId ? `category-${active.data.current.categoryId}` : 'uncategorized';
-      if (originalContainer !== activeContainer) {
+      if (isCrossContainer) {
         const oldCatId = originalContainer.replace('category-', '');
         const newCatId = activeContainer.replace('category-', '');
         
