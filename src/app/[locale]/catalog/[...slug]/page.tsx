@@ -118,11 +118,6 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
           categoryName={locale === 'he' && category.nameHe ? category.nameHe : translateCategory(category.name, locale)} 
           parentSlug={generateSlug(catName)}
         />
-        <div className="w-full flex justify-center pb-32">
-          <Link href="/catalog" prefetch={false} className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-muted-foreground hover:text-foreground transition-colors duration-700 border-b border-transparent hover:border-foreground/30 pb-2">
-            {locale === 'he' ? 'חזור לקטלוג' : 'Go Back to Catalog'}
-          </Link>
-        </div>
       </main>
     );
   }
@@ -137,6 +132,9 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }]
     });
 
+    const moods = locale === 'he' ? ['מינימליסטי', 'חמים', 'טכני', 'דקורטיבי'] : ['Minimal', 'Warm', 'Technical', 'Decorative'];
+    const projects = locale === 'he' ? ['סלון', 'מטבח', 'משרד', 'וילה'] : ['Living Room', 'Kitchen', 'Office', 'Villa'];
+
     // Construct the base URL for the products
     const baseUrl = decodedSlug.map(s => generateSlug(s)).join('/');
 
@@ -147,6 +145,20 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
             {locale === 'he' && targetCategory.nameHe ? targetCategory.nameHe : translateCategory(targetCategory.name, locale)}
           </h1>
           <div className="w-8 h-[1px] bg-foreground/20 mb-24" />
+          <div className={`w-full max-w-6xl flex flex-col md:flex-row justify-between gap-16 text-xs uppercase tracking-[0.2em] font-light text-muted-foreground ${locale === 'he' ? 'md:flex-row-reverse' : ''}`}>
+            <div className="flex flex-col gap-6">
+              <span className="text-[9px] tracking-[0.4em] opacity-40">{locale === 'he' ? 'סינון לפי אווירה' : 'Mood'}</span>
+              <div className={`flex flex-wrap gap-8 ${locale === 'he' ? 'justify-end md:justify-start' : 'justify-start'}`}>
+                {moods.map((m, i) => (<button key={i} className="hover:text-foreground transition-colors duration-700">{m}</button>))}
+              </div>
+            </div>
+            <div className="flex flex-col gap-6">
+              <span className="text-[9px] tracking-[0.4em] opacity-40">{locale === 'he' ? 'קנה לפי חלל' : 'Space'}</span>
+              <div className={`flex flex-wrap gap-8 ${locale === 'he' ? 'justify-end' : 'justify-start'}`}>
+                {projects.map((p, i) => (<button key={i} className="hover:text-foreground transition-colors duration-700">{p}</button>))}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="w-full px-8 md:px-16 pb-40">
