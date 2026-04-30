@@ -34,7 +34,13 @@ export default function ProjectClientView({
   useEffect(() => {
     if (activeIndex !== null) {
       window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        document.body.style.overflow = '';
+      };
+    } else {
+      document.body.style.overflow = '';
     }
   }, [activeIndex, handleKeyDown]);
 

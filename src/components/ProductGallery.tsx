@@ -52,6 +52,17 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedIndex, isHebrew, showNext, showPrev]);
 
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedIndex]);
+
   if (!images || images.length === 0) {
     return (
       <div className="aspect-square bg-muted relative w-full flex items-center justify-center text-muted-foreground border border-dashed border-border">
