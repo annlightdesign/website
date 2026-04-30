@@ -107,28 +107,30 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={`fixed inset-0 z-50 bg-background/95 backdrop-blur-md flex items-center justify-center ${isHebrew ? 'rtl' : 'ltr'}`}
+            className={`fixed inset-0 z-[999] bg-background/95 backdrop-blur-md flex items-center justify-center pt-[80px] ${isHebrew ? 'rtl' : 'ltr'} group`}
             onClick={closeLightbox}
           >
-            {/* Close Button */}
-            <button 
-              className="absolute top-6 right-6 lg:top-8 lg:right-8 p-2 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-50"
-              onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
-            >
-              <X className="w-6 h-6" />
-            </button>
+            {/* Close Button (Top Left) */}
+            <div className="absolute top-[80px] left-0 p-6 md:p-8 z-[9999] group/back cursor-auto" onClick={(e) => e.stopPropagation()}>
+              <button 
+                onClick={(e) => { e.stopPropagation(); closeLightbox(); }} 
+                className="w-10 h-10 bg-background/80 hover:bg-background text-foreground flex items-center justify-center rounded-full transition-all duration-500 font-bold text-lg shadow-sm border border-border/20 hover:scale-110 opacity-100 md:opacity-0 group-hover/back:opacity-100"
+              >
+                ×
+              </button>
+            </div>
 
             {/* Navigation Buttons (only if multiple images) */}
             {images.length > 1 && (
               <>
                 <button
-                  className="absolute left-4 lg:left-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-50"
+                  className="absolute left-4 lg:left-12 top-[calc(50%+40px)] -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-50"
                   onClick={showPrev}
                 >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
                 <button
-                  className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-50"
+                  className="absolute right-4 lg:right-12 top-[calc(50%+40px)] -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-50"
                   onClick={showNext}
                 >
                   <ChevronRight className="w-6 h-6" />

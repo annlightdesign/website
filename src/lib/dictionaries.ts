@@ -9,7 +9,7 @@ export const categoryTranslations: Record<string, string> = {
   "פסי אמבטיה": "Bathroom Strips",
   "מראות מוארות": "Illuminated Mirrors",
   "גופי תאורה בייצור מיוחד": "Custom Lighting",
-  "מנורות עמידה / שולחן": "Floor / Table Lamps",
+  "מנורות עמידה / שולחן": "Floor Table Lamps",
   "גופי תאורה חוץ": "Outdoor Lighting",
   "ריהוט גן מואר": "Illuminated Garden Furniture",
   "מאווררי תקרה": "Ceiling Fans"
