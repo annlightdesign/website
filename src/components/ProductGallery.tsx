@@ -71,8 +71,6 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
       </div>
     );
   }
-
-  return (
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
