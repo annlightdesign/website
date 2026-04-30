@@ -94,7 +94,7 @@ export default async function CatalogPage(props: {
                     key={cat.id} 
                     href={`/catalog/${catSlug}`} 
                     prefetch={false}
-                    className="group flex flex-col items-center"
+                    className="group flex flex-col items-center active:scale-[0.97] active:opacity-80 transition-all duration-500 ease-out"
                   >
                     {/* Floating Image Container */}
                     <div className="w-full aspect-[4/5] relative flex items-center justify-center mb-10 overflow-hidden bg-neutral-100/5 dark:bg-neutral-900/50 rounded-sm">

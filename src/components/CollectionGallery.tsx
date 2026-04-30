@@ -103,7 +103,7 @@ function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle, paren
   const colSlug = generateSlug(col.name);
 
   return (
-    <Link href={`/catalog/${parentSlug}/${colSlug}`} prefetch={false} className="group relative block w-full h-[60vh] md:h-[80vh] overflow-hidden">
+    <Link href={`/catalog/${parentSlug}/${colSlug}`} prefetch={false} className="group relative block w-full h-[60vh] md:h-[80vh] overflow-hidden active:scale-[0.98] active:opacity-90 transition-all duration-700 ease-[0.22,1,0.36,1]">
       <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-900 z-0">
         {imageUrl && (
           <motion.img 
@@ -141,7 +141,7 @@ function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug
   const colSlug = generateSlug(col.name);
 
   return (
-    <Link href={`/catalog/${parentSlug}/${colSlug}`} prefetch={false} className="group relative block w-full h-[50vh] md:h-[70vh] overflow-hidden">
+    <Link href={`/catalog/${parentSlug}/${colSlug}`} prefetch={false} className="group relative block w-full h-[50vh] md:h-[70vh] overflow-hidden active:scale-[0.98] active:opacity-90 transition-all duration-700 ease-[0.22,1,0.36,1]">
       <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-900 z-0">
         {imageUrl && (
           <motion.img 
@@ -178,7 +178,7 @@ function SplitBlock({ col, locale, viewText, getImageUrl, getSubTitle, imageLeft
   const colSlug = generateSlug(col.name);
 
   return (
-    <Link href={`/catalog/${parentSlug}/${colSlug}`} prefetch={false} className="group flex flex-col md:flex-row w-full h-auto md:h-[60vh] bg-neutral-100 dark:bg-neutral-900/50 overflow-hidden">
+    <Link href={`/catalog/${parentSlug}/${colSlug}`} prefetch={false} className="group flex flex-col md:flex-row w-full h-auto md:h-[60vh] bg-neutral-100 dark:bg-neutral-900/50 overflow-hidden active:scale-[0.98] active:opacity-90 transition-all duration-700 ease-[0.22,1,0.36,1]">
       
       {/* Image Side */}
       <div className={`w-full md:w-1/2 h-[40vh] md:h-full relative overflow-hidden ${!imageLeft && 'md:order-2'}`}>
