@@ -86,8 +86,7 @@ export default async function CatalogPage(props: {
                    const imgs = products[0].images as string[];
                    if (imgs.length > 0) imgUrl = imgs[0];
                 }
-                
-                const catSlug = encodeURIComponent(locale === 'he' && cat.nameHe ? cat.nameHe : cat.name);
+                const catSlug = encodeURIComponent(cat.name);
                 
                 return (
                   <Link 

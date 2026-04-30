@@ -168,7 +168,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
               </div>
             ) : (
               products.map((product) => {
-                const prodSlug = encodeURIComponent(locale === 'he' && product.titleHe ? product.titleHe : product.title);
+                const prodSlug = encodeURIComponent(product.title);
                 return (
                 <Link 
                   key={product.id} 

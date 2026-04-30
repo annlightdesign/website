@@ -99,7 +99,7 @@ export default function CollectionGallery({ collections, locale, categoryName, p
 function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug }: any) {
   const imageUrl = getImageUrl(col);
   const name = locale === 'he' && col.nameHe ? col.nameHe : col.name;
-  const colSlug = encodeURIComponent(name);
+  const colSlug = encodeURIComponent(col.name);
 
   return (
     <Link href={`/catalog/${encodeURIComponent(parentSlug)}/${colSlug}`} prefetch={false} className="group relative block w-full h-[60vh] md:h-[80vh] overflow-hidden">
@@ -137,7 +137,7 @@ function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle, paren
 function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug }: any) {
   const imageUrl = getImageUrl(col);
   const name = locale === 'he' && col.nameHe ? col.nameHe : col.name;
-  const colSlug = encodeURIComponent(name);
+  const colSlug = encodeURIComponent(col.name);
 
   return (
     <Link href={`/catalog/${encodeURIComponent(parentSlug)}/${colSlug}`} prefetch={false} className="group relative block w-full h-[50vh] md:h-[70vh] overflow-hidden">
@@ -174,7 +174,7 @@ function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug
 function SplitBlock({ col, locale, viewText, getImageUrl, getSubTitle, imageLeft, parentSlug }: any) {
   const imageUrl = getImageUrl(col);
   const name = locale === 'he' && col.nameHe ? col.nameHe : col.name;
-  const colSlug = encodeURIComponent(name);
+  const colSlug = encodeURIComponent(col.name);
 
   return (
     <Link href={`/catalog/${encodeURIComponent(parentSlug)}/${colSlug}`} prefetch={false} className="group flex flex-col md:flex-row w-full h-auto md:h-[60vh] bg-neutral-100 dark:bg-neutral-900/50 overflow-hidden">
