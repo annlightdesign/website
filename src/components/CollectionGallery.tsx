@@ -119,7 +119,7 @@ function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle, paren
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-700 z-10" />
       
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-24 text-center">
-        <h2 className="text-4xl md:text-6xl lg:text-[7vw] text-white mb-4 uppercase tracking-[0.2em] leading-none text-center font-normal">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl text-white mb-4 uppercase tracking-[0.2em] leading-none text-center font-normal">
           {name}
         </h2>
         <p className="text-white/80 text-xs md:text-sm uppercase tracking-[0.3em] font-light mb-8">
@@ -156,7 +156,7 @@ function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug
       <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-700 z-10" />
       
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-8">
-        <h2 className="text-3xl md:text-5xl lg:text-[4vw] text-white mb-3 uppercase tracking-[0.2em] leading-none text-center font-normal">
+        <h2 className="text-2xl md:text-4xl lg:text-5xl text-white mb-3 uppercase tracking-[0.2em] leading-none text-center font-normal">
           {name}
         </h2>
         <p className="text-white/80 text-[10px] md:text-xs uppercase tracking-[0.2em] font-light mb-8 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700">
@@ -200,7 +200,7 @@ function SplitBlock({ col, locale, viewText, getImageUrl, getSubTitle, imageLeft
         <p className="text-muted-foreground/60 text-[10px] md:text-xs uppercase tracking-[0.3em] font-light mb-6">
           {getSubTitle(col)}
         </p>
-        <h2 className="text-3xl md:text-5xl lg:text-[4vw] text-foreground mb-12 uppercase tracking-[0.2em] leading-none text-center font-normal group-hover:text-black dark:group-hover:text-white transition-colors duration-500">
+        <h2 className="text-2xl md:text-4xl lg:text-5xl text-foreground mb-12 uppercase tracking-[0.2em] leading-none text-center font-normal group-hover:text-black dark:group-hover:text-white transition-colors duration-500">
           {name}
         </h2>
         
