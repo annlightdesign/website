@@ -4,7 +4,6 @@ import { Link } from '@/i18n/routing';
 import { Assistant } from 'next/font/google';
 import { translateCategory } from '@/lib/dictionaries';
 import CinematicCategory from '@/components/CinematicCategory';
-import CollectionGallery from '@/components/CollectionGallery';
 
 
 const assistantFont = Assistant({ subsets: ['hebrew', 'latin'] });
@@ -24,6 +23,7 @@ export default async function CatalogPage(props: {
 }) {
   const { locale } = await props.params;
   const t = await getTranslations('Catalog');
+  const tNav = await getTranslations('Navigation');
 
   const setting = await prisma.siteSetting.findUnique({ where: { key: 'construction_catalog' } });
   const isComingSoon = setting?.value === 'true';
@@ -44,26 +44,19 @@ export default async function CatalogPage(props: {
     );
   }
 
-  // === RESERVED CINEMATIC CATALOG LOGIC ===
-  const searchParams = await props.searchParams;
-  const categoryId = searchParams.category ? parseInt(searchParams.category) : undefined;
-  
-  const tNav = await getTranslations('Navigation');
+  // LAYER 1: CINEMATIC LANDING (The only logic left here)
+  const categories = await prisma.category.findMany({
+    where: { enabled: true, parentId: null },
+    include: {
+      products: {
+        take: 1,
+        orderBy: { id: 'desc' }
+      }
+    },
+    orderBy: { order: 'asc' }
+  });
 
-  // LAYER 1: CINEMATIC LANDING (If no specific category is selected)
-  if (!categoryId) {
-    const categories = await prisma.category.findMany({
-      where: { enabled: true, parentId: null },
-      include: {
-        products: {
-          take: 1,
-          orderBy: { id: 'desc' }
-        }
-      },
-      orderBy: { order: 'asc' }
-    });
-
-    return (
+  return (
       <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
         
         {/* Editorial Header */}
@@ -94,10 +87,12 @@ export default async function CatalogPage(props: {
                    if (imgs.length > 0) imgUrl = imgs[0];
                 }
                 
+                const catSlug = encodeURIComponent(locale === 'he' && cat.nameHe ? cat.nameHe : cat.name);
+                
                 return (
                   <Link 
                     key={cat.id} 
-                    href={`/catalog?category=${cat.id}`} 
+                    href={`/catalog/${catSlug}`} 
                     prefetch={false}
                     className="group flex flex-col items-center"
                   >
@@ -126,131 +121,4 @@ export default async function CatalogPage(props: {
         </div>
       </main>
     );
-  }
-
-  // LAYER 2 & 3
-  const category = await prisma.category.findUnique({ 
-    where: { id: categoryId },
-    include: {
-      children: {
-        where: { enabled: true },
-        orderBy: { order: 'asc' },
-        include: {
-          products: {
-            take: 1,
-            orderBy: { id: 'desc' }
-          }
-        }
-      }
-    }
-  });
-
-  if (category && category.children && category.children.length > 0) {
-    return (
-      <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
-        <CollectionGallery 
-          collections={category.children} 
-          locale={locale} 
-          categoryName={locale === 'he' && category.nameHe ? category.nameHe : translateCategory(category.name, locale)} 
-        />
-      </main>
-    );
-  }
-  
-  const products = await prisma.product.findMany({
-    where: { 
-      categories: { some: { id: categoryId, enabled: true } },
-    },
-    include: { categories: true },
-    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }]
-  });
-
-  const moods = locale === 'he' 
-    ? ['מינימליסטי', 'חמים', 'טכני', 'דקורטיבי']
-    : ['Minimal', 'Warm', 'Technical', 'Decorative'];
-
-  const projects = locale === 'he'
-    ? ['סלון', 'מטבח', 'משרד', 'וילה']
-    : ['Living Room', 'Kitchen', 'Office', 'Villa'];
-
-  return (
-    <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
-      
-      {/* Editorial Header */}
-      <div className="w-full pt-48 pb-24 px-8 md:px-16 flex flex-col items-center text-center">
-        <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-foreground mb-10">
-          {category ? (locale === 'he' && category.nameHe ? category.nameHe : translateCategory(category.name, locale)) : tNav('catalog')}
-        </h1>
-        <div className="w-8 h-[1px] bg-foreground/20 mb-24" />
-
-        {/* Emotion/Mood Filters */}
-        <div className={`w-full max-w-6xl flex flex-col md:flex-row justify-between gap-16 text-xs uppercase tracking-[0.2em] font-light text-muted-foreground ${locale === 'he' ? 'md:flex-row-reverse' : ''}`}>
-          
-          <div className="flex flex-col gap-6">
-            <span className="text-[9px] tracking-[0.4em] opacity-40">{locale === 'he' ? 'סינון לפי אווירה' : 'Mood'}</span>
-            <div className={`flex flex-wrap gap-8 ${locale === 'he' ? 'justify-end md:justify-start' : 'justify-start'}`}>
-              {moods.map((m, i) => (
-                <button key={i} className="hover:text-foreground transition-colors duration-700">{m}</button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-6">
-            <span className="text-[9px] tracking-[0.4em] opacity-40">{locale === 'he' ? 'קנה לפי חלל' : 'Space'}</span>
-            <div className={`flex flex-wrap gap-8 ${locale === 'he' ? 'justify-end' : 'justify-start'}`}>
-              {projects.map((p, i) => (
-                <button key={i} className="hover:text-foreground transition-colors duration-700">{p}</button>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Luxury Grid */}
-      <div className="w-full px-8 md:px-16 pb-40">
-        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 md:gap-x-24 gap-y-32 max-w-[1800px] mx-auto ${locale === 'he' ? 'rtl' : 'ltr'}`}>
-          {products.length === 0 ? (
-            <div className="col-span-full py-32 text-center text-muted-foreground font-light tracking-widest uppercase text-sm">
-              {locale === 'he' ? 'לא נמצאו מוצרים בקולקציה זו.' : 'No pieces found in this collection.'}
-            </div>
-          ) : (
-            products.map((product) => (
-              <Link 
-                key={product.id} 
-                href={`/catalog/product/${product.id}`} 
-                prefetch={false}
-                className="group flex flex-col items-center"
-              >
-                {/* Floating Image Container */}
-                <div className="w-full aspect-[4/5] relative flex items-center justify-center mb-10 overflow-hidden bg-neutral-100/5 dark:bg-neutral-900/50 rounded-sm">
-                  {(product.images as string[])?.[0] ? (
-                    <img
-                      src={(product.images as string[])[0]}
-                      alt={locale === 'he' && product.titleHe ? product.titleHe : product.title}
-                      className="w-full h-full object-contain transition-transform duration-[1.5s] ease-[0.22,1,0.36,1] group-hover:scale-[1.04]"
-                    />
-                  ) : (
-                    <span className="text-[9px] uppercase tracking-widest text-muted-foreground/30">Archive</span>
-                  )}
-                </div>
-                
-                {/* Minimal Typography (Only Name) */}
-                <h2 className="text-sm md:text-base font-light uppercase tracking-[0.2em] text-foreground/80 group-hover:text-foreground transition-colors duration-700 text-center" dir="auto">
-                  {locale === 'he' && product.titleHe ? product.titleHe : product.title}
-                </h2>
-              </Link>
-            ))
-          )}
-        </div>
-      </div>
-      
-      {/* Bottom return link */}
-      <div className="w-full flex justify-center pb-32">
-        <Link href="/catalog" prefetch={false} className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-muted-foreground hover:text-foreground transition-colors duration-700 border-b border-transparent hover:border-foreground/30 pb-2">
-          {locale === 'he' ? 'חזור לקולקציות' : 'Return to Collections'}
-        </Link>
-      </div>
-    </main>
-  );
 }

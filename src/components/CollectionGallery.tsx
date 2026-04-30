@@ -18,9 +18,10 @@ interface CollectionGalleryProps {
   collections: Category[];
   locale: string;
   categoryName: string;
+  parentSlug: string;
 }
 
-export default function CollectionGallery({ collections, locale, categoryName }: CollectionGalleryProps) {
+export default function CollectionGallery({ collections, locale, categoryName, parentSlug }: CollectionGalleryProps) {
   const getImageUrl = (col: Category) => {
     if (col.image) return col.image;
     if (col.products && col.products.length > 0 && col.products[0].images && col.products[0].images.length > 0) {
@@ -72,19 +73,19 @@ export default function CollectionGallery({ collections, locale, categoryName }:
         {rows.map((row, rIndex) => (
           <div key={rIndex} className="w-full">
             {row.type === 'full' && (
-              <FullWidthBlock col={row.items[0]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} />
+              <FullWidthBlock col={row.items[0]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} parentSlug={parentSlug} />
             )}
             {row.type === 'grid2' && (
               <div className={`grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4 ${locale === 'he' ? 'rtl' : 'ltr'}`}>
-                <GridBlock col={row.items[0]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} />
-                <GridBlock col={row.items[1]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} />
+                <GridBlock col={row.items[0]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} parentSlug={parentSlug} />
+                <GridBlock col={row.items[1]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} parentSlug={parentSlug} />
               </div>
             )}
             {row.type === 'split-left' && (
-              <SplitBlock col={row.items[0]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} imageLeft={true} />
+              <SplitBlock col={row.items[0]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} imageLeft={true} parentSlug={parentSlug} />
             )}
             {row.type === 'split-right' && (
-              <SplitBlock col={row.items[0]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} imageLeft={false} />
+              <SplitBlock col={row.items[0]} locale={locale} viewText={viewText} getImageUrl={getImageUrl} getSubTitle={getSubTitle} imageLeft={false} parentSlug={parentSlug} />
             )}
           </div>
         ))}
@@ -95,12 +96,13 @@ export default function CollectionGallery({ collections, locale, categoryName }:
 
 // Sub-components for layouts
 
-function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle }: any) {
+function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug }: any) {
   const imageUrl = getImageUrl(col);
   const name = locale === 'he' && col.nameHe ? col.nameHe : col.name;
+  const colSlug = encodeURIComponent(name);
 
   return (
-    <Link href={`/catalog?category=${col.id}`} prefetch={false} className="group relative block w-full h-[60vh] md:h-[80vh] overflow-hidden">
+    <Link href={`/catalog/${encodeURIComponent(parentSlug)}/${colSlug}`} prefetch={false} className="group relative block w-full h-[60vh] md:h-[80vh] overflow-hidden">
       <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-900 z-0">
         {imageUrl && (
           <motion.img 
@@ -132,12 +134,13 @@ function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle }: any
   );
 }
 
-function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle }: any) {
+function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug }: any) {
   const imageUrl = getImageUrl(col);
   const name = locale === 'he' && col.nameHe ? col.nameHe : col.name;
+  const colSlug = encodeURIComponent(name);
 
   return (
-    <Link href={`/catalog?category=${col.id}`} prefetch={false} className="group relative block w-full h-[50vh] md:h-[70vh] overflow-hidden">
+    <Link href={`/catalog/${encodeURIComponent(parentSlug)}/${colSlug}`} prefetch={false} className="group relative block w-full h-[50vh] md:h-[70vh] overflow-hidden">
       <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-900 z-0">
         {imageUrl && (
           <motion.img 
@@ -168,12 +171,13 @@ function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle }: any) {
   );
 }
 
-function SplitBlock({ col, locale, viewText, getImageUrl, getSubTitle, imageLeft }: any) {
+function SplitBlock({ col, locale, viewText, getImageUrl, getSubTitle, imageLeft, parentSlug }: any) {
   const imageUrl = getImageUrl(col);
   const name = locale === 'he' && col.nameHe ? col.nameHe : col.name;
+  const colSlug = encodeURIComponent(name);
 
   return (
-    <Link href={`/catalog?category=${col.id}`} prefetch={false} className="group flex flex-col md:flex-row w-full h-auto md:h-[60vh] bg-neutral-100 dark:bg-neutral-900/50 overflow-hidden">
+    <Link href={`/catalog/${encodeURIComponent(parentSlug)}/${colSlug}`} prefetch={false} className="group flex flex-col md:flex-row w-full h-auto md:h-[60vh] bg-neutral-100 dark:bg-neutral-900/50 overflow-hidden">
       
       {/* Image Side */}
       <div className={`w-full md:w-1/2 h-[40vh] md:h-full relative overflow-hidden ${!imageLeft && 'md:order-2'}`}>
