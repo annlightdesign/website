@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from '@/i18n/routing';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -44,8 +45,94 @@ export default function ProjectClientView({
     }
   }, [activeIndex, handleKeyDown]);
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const lightboxContent = mounted ? createPortal(
+    <AnimatePresence>
+      {activeIndex !== null && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className={`fixed top-[80px] left-0 right-0 bottom-0 z-[9999] bg-background/95 backdrop-blur-md ${locale === 'he' ? 'rtl' : 'ltr'}`}
+          onClick={() => setActiveIndex(null)}
+        >
+          {/* Close Button (Hover Proximity on Left) */}
+          <div className="absolute top-0 left-0 p-6 lg:p-8 pr-16 pb-16 z-[9999] group/back cursor-auto" onClick={(e) => e.stopPropagation()}>
+            <button 
+              className="p-2 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-all duration-300 opacity-0 group-hover/back:opacity-100"
+              onClick={(e) => { e.stopPropagation(); setActiveIndex(null); }}
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Navigation Buttons */}
+          {images.length > 1 && (
+            <>
+              {activeIndex > 0 && (
+                <button
+                  className="absolute left-4 lg:left-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
+                  onClick={(e) => { e.stopPropagation(); setActiveIndex(activeIndex - 1); }}
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+              )}
+              {activeIndex < images.length - 1 && (
+                <button
+                  className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
+                  onClick={(e) => { e.stopPropagation(); setActiveIndex(activeIndex + 1); }}
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              )}
+            </>
+          )}
+
+          {/* Main Lightbox Image */}
+          <motion.div 
+            key={activeIndex}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="absolute inset-0 p-4 md:p-12 flex items-center justify-center pointer-events-none"
+          >
+            <img 
+              src={images[activeIndex]} 
+              alt="Enlarged view"
+              onContextMenu={(e) => e.preventDefault()}
+              draggable={false}
+              className="max-w-full max-h-full object-contain shadow-2xl transition-all duration-300 ease-out pointer-events-auto select-none"
+              onClick={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+
+          {/* Indicator Dots */}
+          {images.length > 1 && (
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-[9999]">
+              {images.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={(e) => { e.stopPropagation(); setActiveIndex(idx); }}
+                  className={`w-2 h-2 rounded-full transition-all ${idx === activeIndex ? 'bg-foreground w-6' : 'bg-foreground/30 hover:bg-foreground/50'}`}
+                />
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body
+  ) : null;
+
   return (
-    <div className="w-full pt-[80px] md:pt-0 bg-background text-foreground flex flex-col md:flex-row">
+    <>
+      <div className="w-full pt-[80px] md:pt-0 bg-background text-foreground flex flex-col md:flex-row">
 
       {/* Left Column (Sticky Edge-to-Edge Image) */}
       <motion.div
@@ -165,64 +252,7 @@ export default function ProjectClientView({
         )}
       </motion.div>
 
-      {/* Animated Lightbox Overlay */}
-      <div
-        className={`fixed inset-0 z-[999] bg-background/95 backdrop-blur-md flex items-center justify-center p-4 md:p-12 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${activeIndex !== null ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        onClick={() => setActiveIndex(null)}
-      >
-        <button
-          className="absolute top-6 right-6 lg:top-8 lg:right-8 p-2 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
-          onClick={(e) => { e.stopPropagation(); setActiveIndex(null); }}
-        >
-          <X className="w-6 h-6" />
-        </button>
-
-        {activeIndex !== null && activeIndex > 0 && (
-          <button
-            className="absolute left-4 lg:left-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setActiveIndex(activeIndex - 1);
-            }}
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-        )}
-
-        <AnimatePresence mode="wait">
-          {activeIndex !== null && (
-            <motion.img
-              key={activeIndex}
-              src={images[activeIndex]}
-              alt="Enlarged view"
-              onContextMenu={(e) => e.preventDefault()}
-              draggable={false}
-              initial={{ opacity: 0, filter: 'blur(4px)', scale: 0.98 }}
-              animate={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
-              exit={{ opacity: 0, filter: 'blur(4px)', scale: 1.02 }}
-              transition={{ duration: 0.21, ease: [0.25, 0.1, 0.25, 1] }}
-              className="max-w-full max-h-full object-contain shadow-2xl select-none"
-              onClick={(e) => e.stopPropagation()}
-              onPointerDown={(e) => e.stopPropagation()}
-            />
-          )}
-        </AnimatePresence>
-
-        {activeIndex !== null && activeIndex < images.length - 1 && (
-          <button
-            className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setActiveIndex(activeIndex + 1);
-            }}
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        )}
-      </div>
-
-    </div>
+      {lightboxContent}
+    </>
   );
 }
