@@ -115,7 +115,7 @@ export default function ProjectClientView({
           {/* Indicator Dots */}
           {images.length > 1 && (
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-[9999]">
-              {images.map((_, idx) => (
+              {images.map((_: any, idx: number) => (
                 <button
                   key={idx}
                   onClick={(e) => { e.stopPropagation(); setActiveIndex(idx); }}
