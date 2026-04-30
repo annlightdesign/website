@@ -314,7 +314,7 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
         
         fetchQueue.current = fetchQueue.current.then(async () => {
           try {
-            await fetch('/api/products/move', {
+            const response = await fetch('/api/products/move', {
               method: 'PATCH',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -323,12 +323,16 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
                 newCategoryId: newCatId === 'uncategorized' ? null : parseInt(newCatId, 10),
               })
             });
+            if (!response.ok) {
+              const text = await response.text();
+              throw new Error(`API failed: ${text}`);
+            }
             toast.success("Product moved successfully!");
             startTransition(() => {
               router.refresh();
             });
-          } catch (e) {
-            toast.error("Failed to move product.");
+          } catch (e: any) {
+            toast.error(`Failed to move product: ${e.message}`);
           }
         });
       }

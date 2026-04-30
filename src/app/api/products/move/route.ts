@@ -50,7 +50,7 @@ export async function PATCH(req: NextRequest) {
         }
       });
     }
-
+    
     return NextResponse.json({ success: true });
   } catch (error: any) {
     // Write exact error to a file so we can debug it
