@@ -4,6 +4,7 @@ import { Link } from '@/i18n/routing';
 import { Assistant } from 'next/font/google';
 import { translateCategory } from '@/lib/dictionaries';
 import CinematicCategory from '@/components/CinematicCategory';
+import { generateSlug } from '@/lib/slugs';
 
 
 const assistantFont = Assistant({ subsets: ['hebrew', 'latin'] });
@@ -86,7 +87,7 @@ export default async function CatalogPage(props: {
                    const imgs = products[0].images as string[];
                    if (imgs.length > 0) imgUrl = imgs[0];
                 }
-                const catSlug = encodeURIComponent(cat.name);
+                const catSlug = generateSlug(cat.name);
                 
                 return (
                   <Link 

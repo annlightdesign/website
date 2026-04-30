@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/routing";
 import { Playfair_Display } from 'next/font/google';
+import { generateSlug } from '@/lib/slugs';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600'] });
 
@@ -99,10 +100,10 @@ export default function CollectionGallery({ collections, locale, categoryName, p
 function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug }: any) {
   const imageUrl = getImageUrl(col);
   const name = locale === 'he' && col.nameHe ? col.nameHe : col.name;
-  const colSlug = encodeURIComponent(col.name);
+  const colSlug = generateSlug(col.name);
 
   return (
-    <Link href={`/catalog/${encodeURIComponent(parentSlug)}/${colSlug}`} prefetch={false} className="group relative block w-full h-[60vh] md:h-[80vh] overflow-hidden">
+    <Link href={`/catalog/${parentSlug}/${colSlug}`} prefetch={false} className="group relative block w-full h-[60vh] md:h-[80vh] overflow-hidden">
       <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-900 z-0">
         {imageUrl && (
           <motion.img 
@@ -137,10 +138,10 @@ function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle, paren
 function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug }: any) {
   const imageUrl = getImageUrl(col);
   const name = locale === 'he' && col.nameHe ? col.nameHe : col.name;
-  const colSlug = encodeURIComponent(col.name);
+  const colSlug = generateSlug(col.name);
 
   return (
-    <Link href={`/catalog/${encodeURIComponent(parentSlug)}/${colSlug}`} prefetch={false} className="group relative block w-full h-[50vh] md:h-[70vh] overflow-hidden">
+    <Link href={`/catalog/${parentSlug}/${colSlug}`} prefetch={false} className="group relative block w-full h-[50vh] md:h-[70vh] overflow-hidden">
       <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-900 z-0">
         {imageUrl && (
           <motion.img 
@@ -174,10 +175,10 @@ function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug
 function SplitBlock({ col, locale, viewText, getImageUrl, getSubTitle, imageLeft, parentSlug }: any) {
   const imageUrl = getImageUrl(col);
   const name = locale === 'he' && col.nameHe ? col.nameHe : col.name;
-  const colSlug = encodeURIComponent(col.name);
+  const colSlug = generateSlug(col.name);
 
   return (
-    <Link href={`/catalog/${encodeURIComponent(parentSlug)}/${colSlug}`} prefetch={false} className="group flex flex-col md:flex-row w-full h-auto md:h-[60vh] bg-neutral-100 dark:bg-neutral-900/50 overflow-hidden">
+    <Link href={`/catalog/${parentSlug}/${colSlug}`} prefetch={false} className="group flex flex-col md:flex-row w-full h-auto md:h-[60vh] bg-neutral-100 dark:bg-neutral-900/50 overflow-hidden">
       
       {/* Image Side */}
       <div className={`w-full md:w-1/2 h-[40vh] md:h-full relative overflow-hidden ${!imageLeft && 'md:order-2'}`}>

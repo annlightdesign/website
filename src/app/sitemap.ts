@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { prisma } from '@/lib/prisma';
 import { routing } from '@/i18n/routing';
+import { generateSlug } from '@/lib/slugs';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -38,6 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const projects = await prisma.project.findMany({
       select: {
         id: true,
+        title: true,
         createdAt: true,
       }
     });
@@ -45,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     projects.forEach(project => {
       locales.forEach(locale => {
         sitemapEntries.push({
-          url: `${baseUrl}/${locale}/projects/${project.id}`,
+          url: `${baseUrl}/${locale}/projects/${generateSlug(project.title)}`,
           lastModified: project.createdAt, 
           changeFrequency: 'monthly',
           priority: 0.7,

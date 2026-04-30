@@ -3,15 +3,14 @@ import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import ProjectClientView from '@/components/ProjectClientView';
 import SchemaOrg from '@/components/SchemaOrg';
+import { decodeSlug } from '@/lib/slugs';
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string, locale: string }> }) {
-  const { id, locale } = await params;
-  const projectId = parseInt(id, 10);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string, locale: string }> }) {
+  const { slug, locale } = await params;
+  const decodedTitle = decodeSlug(slug);
   
-  if (isNaN(projectId)) return {};
-
-  const project = await prisma.project.findUnique({
-    where: { id: projectId }
+  const project = await prisma.project.findFirst({
+    where: { OR: [{ title: { equals: decodedTitle, mode: 'insensitive' } }, { titleHe: decodedTitle }] }
   });
 
   if (!project) return {};
@@ -39,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title: `${title} | Ann Light`,
       description,
-      url: `${baseUrl}/${locale}/projects/${id}`,
+      url: `${baseUrl}/${locale}/projects/${slug}`,
       type: 'article',
       images: [
         {
@@ -59,26 +58,25 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default async function SingleProjectPage({ params }: { params: Promise<{ id: string, locale: string }> }) {
-  const { id, locale } = await params;
+export default async function SingleProjectPage({ params }: { params: Promise<{ slug: string, locale: string }> }) {
+  const { slug, locale } = await params;
   const t = await getTranslations('Projects');
   
-  const projectId = parseInt(id, 10);
-  if (isNaN(projectId)) notFound();
+  const decodedTitle = decodeSlug(slug);
   
-  const project = await prisma.project.findUnique({
-    where: { id: projectId }
+  const project = await prisma.project.findFirst({
+    where: { OR: [{ title: { equals: decodedTitle, mode: 'insensitive' } }, { titleHe: decodedTitle }] }
   });
 
   if (!project) notFound();
 
   const prevProject = await prisma.project.findFirst({
-    where: { id: { lt: projectId } },
+    where: { id: { lt: project.id } },
     orderBy: { id: 'desc' }
   });
 
   const nextProject = await prisma.project.findFirst({
-    where: { id: { gt: projectId } },
+    where: { id: { gt: project.id } },
     orderBy: { id: 'asc' }
   });
 
@@ -114,7 +112,7 @@ export default async function SingleProjectPage({ params }: { params: Promise<{ 
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${baseUrl}/${locale}/projects/${id}`
+      '@id': `${baseUrl}/${locale}/projects/${slug}`
     }
   };
 

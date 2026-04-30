@@ -7,12 +7,13 @@ import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { translateCategory, translateSpecKey, translateSpecValue } from '@/lib/dictionaries';
 import ProductGallery from '@/components/ProductGallery';
 import CollectionGallery from '@/components/CollectionGallery';
+import { generateSlug, decodeSlug } from '@/lib/slugs';
 
 const assistantFont = Assistant({ subsets: ['hebrew', 'latin'] });
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string, slug: string[] }> }) {
   const { locale, slug } = await params;
-  const decodedSlug = slug.map(s => decodeURIComponent(s));
+  const decodedSlug = slug.map(s => decodeSlug(s));
   const titleStr = decodedSlug[decodedSlug.length - 1];
   return {
     title: titleStr,
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function DynamicCatalogPage(props: { params: Promise<{ locale: string, slug: string[] }> }) {
   const { locale, slug } = await props.params;
-  const decodedSlug = slug.map(s => decodeURIComponent(s));
+  const decodedSlug = slug.map(s => decodeSlug(s));
   const t = await getTranslations('Catalog');
   const tNav = await getTranslations('Navigation');
 
@@ -81,13 +82,13 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
     if (childCategory) {
       targetCategory = childCategory;
       renderType = 'product-grid';
-      backHref = `/catalog/${encodeURIComponent(catName)}`;
+      backHref = `/catalog/${generateSlug(catName)}`;
     } else {
       const product = await findProductByName(childCatName);
       if (product) {
         targetProduct = product;
         renderType = 'product-single';
-        backHref = `/catalog/${encodeURIComponent(catName)}`;
+        backHref = `/catalog/${generateSlug(catName)}`;
       } else {
         notFound();
       }
@@ -99,7 +100,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
     if (product) {
       targetProduct = product;
       renderType = 'product-single';
-      backHref = `/catalog/${encodeURIComponent(catName)}/${encodeURIComponent(decodedSlug[1])}`;
+      backHref = `/catalog/${generateSlug(catName)}/${generateSlug(decodedSlug[1])}`;
     } else {
       notFound();
     }
@@ -115,7 +116,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
           collections={category.children} 
           locale={locale} 
           categoryName={locale === 'he' && category.nameHe ? category.nameHe : translateCategory(category.name, locale)} 
-          parentSlug={catName} // Wait, I need to pass parentSlug so CollectionGallery links correctly!
+          parentSlug={generateSlug(catName)}
         />
       </main>
     );
@@ -135,7 +136,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
     const projects = locale === 'he' ? ['סלון', 'מטבח', 'משרד', 'וילה'] : ['Living Room', 'Kitchen', 'Office', 'Villa'];
 
     // Construct the base URL for the products
-    const baseUrl = decodedSlug.map(s => encodeURIComponent(s)).join('/');
+    const baseUrl = decodedSlug.map(s => generateSlug(s)).join('/');
 
     return (
       <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
@@ -168,7 +169,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
               </div>
             ) : (
               products.map((product) => {
-                const prodSlug = encodeURIComponent(product.title);
+                const prodSlug = generateSlug(product.title);
                 return (
                 <Link 
                   key={product.id} 

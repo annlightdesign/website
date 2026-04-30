@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from '@/i18n/routing';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { generateSlug } from '@/lib/slugs';
 
 export default function ProjectClientView({
   project,
@@ -92,13 +93,13 @@ export default function ProjectClientView({
         <div className="mt-16 w-full max-w-xl border-t border-foreground/30 pt-6 text-sm flex flex-col gap-4 font-sans uppercase tracking-[0.15em] text-foreground transition-colors group">
           <div className="flex justify-between items-center w-full">
             {prevProject ? (
-              <Link href={`/projects/${prevProject.id}`} className="hover:opacity-60 transition-opacity flex items-center gap-2">
+              <Link href={`/projects/${generateSlug(prevProject.title)}`} className="hover:opacity-60 transition-opacity flex items-center gap-2">
                 <span className="font-bold text-lg leading-none">←</span> <span className="hidden sm:inline">{locale === 'he' && prevProject.titleHe ? prevProject.titleHe : prevProject.title}</span>
               </Link>
             ) : <span className="opacity-0">Prev</span>}
 
             {nextProject ? (
-              <Link href={`/projects/${nextProject.id}`} className="hover:opacity-60 transition-opacity flex items-center gap-2 text-right">
+              <Link href={`/projects/${generateSlug(nextProject.title)}`} className="hover:opacity-60 transition-opacity flex items-center gap-2 text-right">
                 <span className="hidden sm:inline">{locale === 'he' && nextProject.titleHe ? nextProject.titleHe : nextProject.title}</span> <span className="font-bold text-lg leading-none">→</span>
               </Link>
             ) : <span className="opacity-0">Next</span>}
