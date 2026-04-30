@@ -134,13 +134,20 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
   const [categories, setCategories] = useState(initialCategories);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const lastDragTime = React.useRef(0);
 
   useEffect(() => {
-    // Only update from server props if we are not pending a transition.
-    if (!isPending) {
+    // Only update from server props if we are not pending a transition
+    // AND if the user hasn't dragged anything recently (within 4 seconds).
+    // This strictly prevents rapid subsequent drops from snapping back to stale cached props.
+    if (!isPending && Date.now() - lastDragTime.current > 4000) {
       setCategories(initialCategories);
     }
   }, [initialCategories, isPending]);
+
+  const handleDragStart = () => {
+    lastDragTime.current = Date.now();
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -160,6 +167,7 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
   };
 
   const handleDragOver = (event: DragOverEvent) => {
+    lastDragTime.current = Date.now();
     const { active, over } = event;
     if (!over) return;
 
@@ -204,6 +212,7 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
+    lastDragTime.current = Date.now();
     const { active, over } = event;
     if (!over) return;
 
@@ -280,6 +289,7 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
     <DndContext 
       sensors={sensors}
       collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
