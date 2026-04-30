@@ -6,13 +6,14 @@ import { Upload, X, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface CategoryFormProps {
-  existingCategory?: { id: number; name: string; nameHe?: string | null; enabled?: boolean; image?: string | null };
+  existingCategory?: { id: number; name: string; nameHe?: string | null; enabled?: boolean; image?: string | null; parentId?: number | null };
   trigger?: ReactNode;
   externalOpen?: boolean;
   onExternalClose?: () => void;
+  parentId?: number | null;
 }
 
-export default function CategoryForm({ existingCategory, trigger, externalOpen, onExternalClose }: CategoryFormProps) {
+export default function CategoryForm({ existingCategory, trigger, externalOpen, onExternalClose, parentId }: CategoryFormProps) {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const isOpen = externalOpen !== undefined ? externalOpen : internalIsOpen;
   const setIsOpen = (val: boolean) => {
@@ -55,7 +56,7 @@ export default function CategoryForm({ existingCategory, trigger, externalOpen, 
     const res = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, nameHe, enabled, image })
+      body: JSON.stringify({ name, nameHe, enabled, image, parentId: existingCategory ? existingCategory.parentId : parentId })
     });
 
     if (res.ok) {

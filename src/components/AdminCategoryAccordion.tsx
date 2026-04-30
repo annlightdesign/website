@@ -18,6 +18,7 @@ interface AdminCategoryAccordionProps {
   dragAttributes?: any;
   dragListeners?: any;
   isDragging?: boolean;
+  children?: React.ReactNode;
 }
 
 export default function AdminCategoryAccordion({
@@ -29,12 +30,14 @@ export default function AdminCategoryAccordion({
   dragAttributes,
   dragListeners,
   isDragging = false,
+  children,
 }: AdminCategoryAccordionProps) {
   const storageKey = `annlight_admin_accordion_${title}`;
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [mounted, setMounted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddCollectionOpen, setIsAddCollectionOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdatingEnabled, setIsUpdatingEnabled] = useState(false);
@@ -184,6 +187,15 @@ export default function AdminCategoryAccordion({
                         Edit
                       </button>
                       <button 
+                        className="w-full text-left px-4 py-2 hover:bg-muted text-[13px] font-medium tracking-wide uppercase transition-colors" 
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          setIsAddCollectionOpen(true);
+                        }}
+                      >
+                        Add Collection
+                      </button>
+                      <button 
                         className="w-full text-left px-4 py-2 hover:bg-red-500/10 text-red-500 text-[13px] font-medium tracking-wide uppercase transition-colors" 
                         onClick={() => { setIsConfirmOpen(true); setIsMenuOpen(false); }}
                       >
@@ -198,6 +210,12 @@ export default function AdminCategoryAccordion({
                   trigger={null}
                   externalOpen={isEditModalOpen}
                   onExternalClose={() => setIsEditModalOpen(false)}
+              />
+              <CategoryForm 
+                  parentId={category.id}
+                  trigger={null}
+                  externalOpen={isAddCollectionOpen}
+                  onExternalClose={() => setIsAddCollectionOpen(false)}
               />
             </>
           )}
@@ -223,7 +241,7 @@ export default function AdminCategoryAccordion({
             className="overflow-hidden bg-background"
           >
             <div className="p-4 border-t border-border/20">
-              <SortableProductsList initialProducts={products} categoryId={category?.id} />
+              {children || <SortableProductsList initialProducts={products} categoryId={category?.id} />}
             </div>
           </motion.div>
         )}

@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import ProductForm from '@/components/ProductForm';
 import CategoryForm from '@/components/CategoryForm';
-import SortableCategoriesList from '@/components/SortableCategoriesList';
+import CatalogDndManager from '@/components/CatalogDndManager';
 import { ArrowLeft } from 'lucide-react';
 
 export default async function AdminProductsPage() {
@@ -33,7 +33,7 @@ export default async function AdminProductsPage() {
       </div>
 
       <div className="mt-10 space-y-2">
-        <SortableCategoriesList 
+        <CatalogDndManager 
           initialCategories={[
             ...productsByCategory,
             ...(uncategorizedProducts.length > 0 ? [{
