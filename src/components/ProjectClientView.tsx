@@ -251,7 +251,7 @@ export default function ProjectClientView({
           </div>
         )}
       </motion.div>
-
+      </div>
       {lightboxContent}
     </>
   );
