@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useTransition } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -133,10 +133,14 @@ function CategoryContainer({
 export default function CatalogDndManager({ initialCategories }: { initialCategories: any[] }) {
   const [categories, setCategories] = useState(initialCategories);
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    setCategories(initialCategories);
-  }, [initialCategories]);
+    // Only update from server props if we are not pending a transition.
+    if (!isPending) {
+      setCategories(initialCategories);
+    }
+  }, [initialCategories, isPending]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -232,7 +236,9 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ orderedIds: newArray.map((p: any) => p.id) })
           });
-          router.refresh();
+          startTransition(() => {
+            router.refresh();
+          });
         } catch (e) {
           toast.error("Failed to reorder products.");
         }
@@ -255,7 +261,9 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
             })
           });
           toast.success("Product moved successfully!");
-          router.refresh();
+          startTransition(() => {
+            router.refresh();
+          });
         } catch (e) {
           toast.error("Failed to move product.");
         }

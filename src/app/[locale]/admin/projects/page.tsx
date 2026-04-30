@@ -3,6 +3,9 @@ import ProjectForm from '@/components/ProjectForm';
 import SortableProjectsList from '@/components/SortableProjectsList';
 import { ArrowLeft } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function AdminProjectsPage() {
   const allProjects = await prisma.project.findMany({ orderBy: [{ order: 'asc' }, { createdAt: 'asc' }] });
 

@@ -4,6 +4,9 @@ import CategoryForm from '@/components/CategoryForm';
 import CatalogDndManager from '@/components/CatalogDndManager';
 import { ArrowLeft } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function AdminProductsPage() {
   const allProducts = await prisma.product.findMany({ 
     include: { categories: true },

@@ -2,10 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/routing";
-import { Playfair_Display } from 'next/font/google';
 import { generateSlug } from '@/lib/slugs';
-
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '600'] });
 
 interface Category {
   id: number;
@@ -63,14 +60,14 @@ export default function CollectionGallery({ collections, locale, categoryName, p
         <span className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-muted-foreground mb-6">
           {locale === 'he' ? 'משפחות מוצרים' : 'Product Families'}
         </span>
-        <h1 className={`text-4xl md:text-6xl text-foreground mb-10 ${playfair.className} tracking-wide`}>
+        <h1 className="text-5xl md:text-7xl font-normal uppercase tracking-widest text-foreground mb-10 leading-tight">
           {categoryName}
         </h1>
         <div className="w-8 h-[1px] bg-foreground/20" />
       </div>
 
       {/* Gallery */}
-      <div className="w-full max-w-[1920px] mx-auto flex flex-col gap-y-1 md:gap-y-4 px-1 md:px-4">
+      <div className="w-full flex flex-col gap-y-1 md:gap-y-2">
         {rows.map((row, rIndex) => (
           <div key={rIndex} className="w-full">
             {row.type === 'full' && (
@@ -117,7 +114,7 @@ function FullWidthBlock({ col, locale, viewText, getImageUrl, getSubTitle, paren
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-700 z-10" />
       
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-24 text-center">
-        <h2 className={`text-4xl md:text-6xl text-white mb-4 ${playfair.className} tracking-wide`}>
+        <h2 className="text-4xl md:text-6xl lg:text-[7vw] text-white mb-4 uppercase tracking-[0.2em] leading-none text-center font-normal">
           {name}
         </h2>
         <p className="text-white/80 text-xs md:text-sm uppercase tracking-[0.3em] font-light mb-8">
@@ -154,7 +151,7 @@ function GridBlock({ col, locale, viewText, getImageUrl, getSubTitle, parentSlug
       <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-700 z-10" />
       
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-8">
-        <h2 className={`text-3xl md:text-4xl text-white mb-3 ${playfair.className} tracking-wide`}>
+        <h2 className="text-3xl md:text-5xl lg:text-[4vw] text-white mb-3 uppercase tracking-[0.2em] leading-none text-center font-normal">
           {name}
         </h2>
         <p className="text-white/80 text-[10px] md:text-xs uppercase tracking-[0.2em] font-light mb-8 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700">
@@ -198,7 +195,7 @@ function SplitBlock({ col, locale, viewText, getImageUrl, getSubTitle, imageLeft
         <p className="text-muted-foreground/60 text-[10px] md:text-xs uppercase tracking-[0.3em] font-light mb-6">
           {getSubTitle(col)}
         </p>
-        <h2 className={`text-3xl md:text-5xl text-foreground mb-12 ${playfair.className} tracking-wide group-hover:text-black dark:group-hover:text-white transition-colors duration-500`}>
+        <h2 className="text-3xl md:text-5xl lg:text-[4vw] text-foreground mb-12 uppercase tracking-[0.2em] leading-none text-center font-normal group-hover:text-black dark:group-hover:text-white transition-colors duration-500">
           {name}
         </h2>
         
