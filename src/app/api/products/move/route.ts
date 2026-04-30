@@ -53,6 +53,9 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Error occurred' }, { status: 500 });
+    // Write exact error to a file so we can debug it
+    const fs = require('fs');
+    fs.appendFileSync('scratch/move-error.log', new Date().toISOString() + ': ' + error.message + '\n' + error.stack + '\n\n');
+    return NextResponse.json({ error: error.message || 'Error occurred', details: error.stack }, { status: 500 });
   }
 }

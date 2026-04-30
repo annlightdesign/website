@@ -131,7 +131,19 @@ function CategoryContainer({
 
 // ----- Main DnD Manager -----
 export default function CatalogDndManager({ initialCategories }: { initialCategories: any[] }) {
-  const [categories, setCategories] = useState(initialCategories);
+  const [categoriesState, _setCategories] = useState(initialCategories);
+  const categoriesRef = React.useRef(initialCategories);
+
+  const setCategories = (updateFn: any) => {
+    _setCategories((prev: any) => {
+      const next = typeof updateFn === 'function' ? updateFn(prev) : updateFn;
+      categoriesRef.current = next;
+      return next;
+    });
+  };
+
+  const categories = categoriesState;
+
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const lastDragTime = React.useRef(0);
@@ -184,9 +196,9 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
       return;
     }
 
-    setCategories((prev) => {
-      const activeItems = prev.find(c => (c.category ? `category-${c.category.id}` : 'uncategorized') === activeContainer)?.products || [];
-      const overItems = prev.find(c => (c.category ? `category-${c.category.id}` : 'uncategorized') === overContainer)?.products || [];
+    setCategories((prev: any[]) => {
+      const activeItems = prev.find((c: any) => (c.category ? `category-${c.category.id}` : 'uncategorized') === activeContainer)?.products || [];
+      const overItems = prev.find((c: any) => (c.category ? `category-${c.category.id}` : 'uncategorized') === overContainer)?.products || [];
       const activeIndex = activeItems.findIndex((p: any) => `product-${p.id}` === activeId);
       let overIndex = overItems.findIndex((p: any) => `product-${p.id}` === overId);
 
@@ -221,19 +233,37 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
     const overId = String(over.id);
 
     if (activeId.startsWith('product-')) {
-      const activeContainer = findContainer(activeId);
+      // Use the synchronous ref to guarantee we never read a stale closure state
+      const currentCats = categoriesRef.current;
+      
+      const findContainerSync = (id: string) => {
+        if (id.startsWith('category-') || id === 'uncategorized') return id;
+        const prodIdNum = parseInt(id.replace('product-', ''), 10);
+        for (const cat of currentCats) {
+          if (cat.products.find((p: any) => p.id === prodIdNum)) {
+            return cat.category ? `category-${cat.category.id}` : 'uncategorized';
+          }
+        }
+        return null;
+      };
+
+      let activeContainer = overId;
+      if (overId.startsWith('product-')) {
+        activeContainer = findContainerSync(overId) || 'uncategorized';
+      }
+
       if (!activeContainer) return;
 
-      const containerIndex = categories.findIndex(c => (c.category ? `category-${c.category.id}` : 'uncategorized') === activeContainer);
+      const containerIndex = currentCats.findIndex((c: any) => (c.category ? `category-${c.category.id}` : 'uncategorized') === activeContainer);
       if (containerIndex < 0) return;
 
-      const productsArray = categories[containerIndex].products;
+      const productsArray = currentCats[containerIndex].products;
       const oldIndex = productsArray.findIndex((p: any) => `product-${p.id}` === activeId);
       const newIndex = productsArray.findIndex((p: any) => `product-${p.id}` === overId);
 
       if (oldIndex !== newIndex && newIndex !== -1) {
         const newArray = arrayMove(productsArray, oldIndex, newIndex);
-        setCategories((prev) => {
+        setCategories((prev: any[]) => {
           const newCats = [...prev];
           newCats[containerIndex] = { ...newCats[containerIndex], products: newArray };
           return newCats;
@@ -256,7 +286,7 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
         });
       }
 
-      // Check if container changed (from dragOver to dragEnd)
+      // Check if container changed (from start of drag to drop location)
       const originalContainer = active.data.current?.categoryId ? `category-${active.data.current.categoryId}` : 'uncategorized';
       if (originalContainer !== activeContainer) {
         const oldCatId = originalContainer.replace('category-', '');
