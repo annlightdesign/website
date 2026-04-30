@@ -135,6 +135,7 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const lastDragTime = React.useRef(0);
+  const fetchQueue = React.useRef<Promise<void>>(Promise.resolve());
 
   useEffect(() => {
     // Only update from server props if we are not pending a transition
@@ -238,19 +239,21 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
           return newCats;
         });
 
-        // Save reordering
-        try {
-          await fetch('/api/products/reorder', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ orderedIds: newArray.map((p: any) => p.id) })
-          });
-          startTransition(() => {
-            router.refresh();
-          });
-        } catch (e) {
-          toast.error("Failed to reorder products.");
-        }
+        // Save reordering via queue
+        fetchQueue.current = fetchQueue.current.then(async () => {
+          try {
+            await fetch('/api/products/reorder', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ orderedIds: newArray.map((p: any) => p.id) })
+            });
+            startTransition(() => {
+              router.refresh();
+            });
+          } catch (e) {
+            toast.error("Failed to reorder products.");
+          }
+        });
       }
 
       // Check if container changed (from dragOver to dragEnd)
@@ -259,23 +262,25 @@ export default function CatalogDndManager({ initialCategories }: { initialCatego
         const oldCatId = originalContainer.replace('category-', '');
         const newCatId = activeContainer.replace('category-', '');
         
-        try {
-          await fetch('/api/products/move', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              productId: parseInt(activeId.replace('product-', ''), 10),
-              oldCategoryId: oldCatId === 'uncategorized' ? null : parseInt(oldCatId, 10),
-              newCategoryId: newCatId === 'uncategorized' ? null : parseInt(newCatId, 10),
-            })
-          });
-          toast.success("Product moved successfully!");
-          startTransition(() => {
-            router.refresh();
-          });
-        } catch (e) {
-          toast.error("Failed to move product.");
-        }
+        fetchQueue.current = fetchQueue.current.then(async () => {
+          try {
+            await fetch('/api/products/move', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                productId: parseInt(activeId.replace('product-', ''), 10),
+                oldCategoryId: oldCatId === 'uncategorized' ? null : parseInt(oldCatId, 10),
+                newCategoryId: newCatId === 'uncategorized' ? null : parseInt(newCatId, 10),
+              })
+            });
+            toast.success("Product moved successfully!");
+            startTransition(() => {
+              router.refresh();
+            });
+          } catch (e) {
+            toast.error("Failed to move product.");
+          }
+        });
       }
     }
   };
