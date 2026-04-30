@@ -27,29 +27,28 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Move the product: Remove from old category, add to new category
-    // Note: a product can be in multiple categories, but for drag & drop we assume it's moving from one specific context to another.
-    if (oldCategoryId !== newCategoryId) {
-      if (oldCategoryId) {
-        await prisma.product.update({
-          where: { id: productId },
-          data: {
-            categories: {
-              disconnect: { id: oldCategoryId },
-            }
+    // Move the product: Ensure it only belongs to the new category.
+    // The user explicitly requested that when moving to a collection, it shouldn't stay in the parent category.
+    // Using `set` clears all existing relationships and assigns it exclusively to the new one.
+    if (newCategoryId) {
+      await prisma.product.update({
+        where: { id: productId },
+        data: {
+          categories: {
+            set: [{ id: newCategoryId }],
           }
-        });
-      }
-      if (newCategoryId) {
-        await prisma.product.update({
-          where: { id: productId },
-          data: {
-            categories: {
-              connect: { id: newCategoryId },
-            }
+        }
+      });
+    } else {
+      // If moving to uncategorized
+      await prisma.product.update({
+        where: { id: productId },
+        data: {
+          categories: {
+            set: [],
           }
-        });
-      }
+        }
+      });
     }
 
     return NextResponse.json({ success: true });
