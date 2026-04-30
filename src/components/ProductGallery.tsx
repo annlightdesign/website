@@ -146,20 +146,12 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
               className="relative w-full h-full max-w-5xl max-h-[85vh] mx-auto p-4 md:p-12 flex items-center justify-center"
               onClick={(e) => {
                 e.stopPropagation();
-                setIsZoomed(!isZoomed);
               }}
             >
               <img 
                 src={images[selectedIndex]} 
                 alt={`${title} Preview`} 
-                className={`transition-all duration-300 ease-out shadow-2xl ${
-                  isZoomed 
-                    ? 'w-[200%] h-[200%] max-w-none origin-center cursor-zoom-out object-cover' 
-                    : 'max-w-full max-h-full object-contain cursor-zoom-in'
-                }`}
-                style={{
-                  height: isZoomed ? '150vh' : undefined // Basic zoom
-                }}
+                className="max-w-full max-h-full object-contain shadow-2xl transition-all duration-300 ease-out"
               />
             </motion.div>
 

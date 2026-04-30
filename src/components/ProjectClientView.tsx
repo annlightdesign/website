@@ -165,23 +165,23 @@ export default function ProjectClientView({
         onClick={() => setActiveIndex(null)}
       >
         <button
-          className="absolute top-6 right-6 md:top-8 md:right-8 text-foreground hover:text-muted-foreground z-[9999] p-3 bg-background/50 rounded-full cursor-pointer hover:bg-background"
+          className="absolute top-6 right-6 lg:top-8 lg:right-8 p-2 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
           onClick={(e) => { e.stopPropagation(); setActiveIndex(null); }}
         >
-          <X className="w-8 h-8 md:w-10 md:h-10 text-foreground" />
+          <X className="w-6 h-6" />
         </button>
 
         {activeIndex !== null && activeIndex > 0 && (
-          <div
-            className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-[9999] p-4 bg-background/50 hover:bg-background rounded-full transition-transform hover:scale-105 cursor-pointer pointer-events-auto"
+          <button
+            className="absolute left-4 lg:left-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               setActiveIndex(activeIndex - 1);
             }}
           >
-            <ChevronLeft className="w-8 h-8 md:w-12 md:h-12 text-foreground" />
-          </div>
+            <ChevronLeft className="w-6 h-6" />
+          </button>
         )}
 
         <AnimatePresence mode="wait">
@@ -204,16 +204,16 @@ export default function ProjectClientView({
         </AnimatePresence>
 
         {activeIndex !== null && activeIndex < images.length - 1 && (
-          <div
-            className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-[9999] p-4 bg-background/50 hover:bg-background rounded-full transition-transform hover:scale-105 cursor-pointer pointer-events-auto"
+          <button
+            className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               setActiveIndex(activeIndex + 1);
             }}
           >
-            <ChevronRight className="w-8 h-8 md:w-12 md:h-12 text-foreground" />
-          </div>
+            <ChevronRight className="w-6 h-6" />
+          </button>
         )}
       </div>
 
