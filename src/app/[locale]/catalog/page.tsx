@@ -4,6 +4,7 @@ import { Link } from '@/i18n/routing';
 import { Assistant } from 'next/font/google';
 import { translateCategory } from '@/lib/dictionaries';
 import CinematicCategory from '@/components/CinematicCategory';
+import CollectionGallery from '@/components/CollectionGallery';
 
 
 const assistantFont = Assistant({ subsets: ['hebrew', 'latin'] });
@@ -127,8 +128,34 @@ export default async function CatalogPage(props: {
     );
   }
 
-  // LAYER 2: CLEAN MINIMAL GRID (Inside Category)
-  const category = await prisma.category.findUnique({ where: { id: categoryId } });
+  // LAYER 2 & 3
+  const category = await prisma.category.findUnique({ 
+    where: { id: categoryId },
+    include: {
+      children: {
+        where: { enabled: true },
+        orderBy: { order: 'asc' },
+        include: {
+          products: {
+            take: 1,
+            orderBy: { id: 'desc' }
+          }
+        }
+      }
+    }
+  });
+
+  if (category && category.children && category.children.length > 0) {
+    return (
+      <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
+        <CollectionGallery 
+          collections={category.children} 
+          locale={locale} 
+          categoryName={locale === 'he' && category.nameHe ? category.nameHe : translateCategory(category.name, locale)} 
+        />
+      </main>
+    );
+  }
   
   const products = await prisma.product.findMany({
     where: { 
