@@ -54,7 +54,12 @@ export default function CollectionGallery({ collections, locale, categoryName, p
   }
 
   return (
-    <div className="w-full bg-[#FAFAFA] dark:bg-[#0A0A0A] text-foreground pb-32">
+    <div className="w-full bg-[#FAFAFA] dark:bg-[#0A0A0A] text-foreground pb-32 overflow-x-hidden">
+      <style>{`
+        ::-webkit-scrollbar { display: none; }
+        * { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+      
       {/* Editorial Header */}
       <div className="w-full pt-40 pb-24 px-8 md:px-16 flex flex-col items-center text-center">
         <span className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-muted-foreground mb-6">

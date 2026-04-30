@@ -139,7 +139,11 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
     const baseUrl = decodedSlug.map(s => generateSlug(s)).join('/');
 
     return (
-      <main className={`w-full min-h-screen bg-background text-foreground ${locale === 'he' ? assistantFont.className : ''}`}>
+      <main className={`w-full min-h-screen bg-background text-foreground overflow-x-hidden ${locale === 'he' ? assistantFont.className : ''}`}>
+        <style>{`
+          ::-webkit-scrollbar { display: none; }
+          * { -ms-overflow-style: none; scrollbar-width: none; }
+        `}</style>
         <div className="w-full pt-48 pb-24 px-8 md:px-16 flex flex-col items-center text-center">
           <h1 className="text-5xl md:text-7xl lg:text-[6vw] font-normal uppercase tracking-[0.2em] md:tracking-[0.3em] text-foreground mb-10 leading-tight">
             {locale === 'he' && targetCategory.nameHe ? targetCategory.nameHe : translateCategory(targetCategory.name, locale)}
