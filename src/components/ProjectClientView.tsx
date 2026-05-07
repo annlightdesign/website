@@ -60,10 +60,9 @@ export default function ProjectClientView({
           className={`fixed top-[80px] left-0 right-0 bottom-0 z-[9999] bg-background/95 backdrop-blur-md ${locale === 'he' ? 'rtl' : 'ltr'}`}
           onClick={() => setActiveIndex(null)}
         >
-          {/* Close Button (Hover Proximity on Left) */}
           <div className="absolute top-0 left-0 p-6 lg:p-8 pr-16 pb-16 z-[9999] group/back cursor-auto" onClick={(e) => e.stopPropagation()}>
             <button 
-              className="p-2 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-all duration-300 opacity-0 group-hover/back:opacity-100"
+              className="p-2 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-all duration-300 opacity-100 md:opacity-0 group-hover/back:opacity-100"
               onClick={(e) => { e.stopPropagation(); setActiveIndex(null); }}
             >
               <X className="w-6 h-6" />
