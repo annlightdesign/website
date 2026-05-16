@@ -83,7 +83,7 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className={`fixed top-[80px] left-0 right-0 bottom-0 z-[9999] bg-background/95 backdrop-blur-md ${isHebrew ? 'rtl' : 'ltr'}`}
+          className={`fixed inset-0 z-[9999] bg-background/95 backdrop-blur-md ${isHebrew ? 'rtl' : 'ltr'}`}
           onClick={closeLightbox}
         >
           {/* Main Lightbox Image */}
