@@ -86,10 +86,27 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
           className={`fixed top-[80px] left-0 right-0 bottom-0 z-[9999] bg-background/95 backdrop-blur-md ${isHebrew ? 'rtl' : 'ltr'}`}
           onClick={closeLightbox}
         >
-          {/* Close Button (Hover Proximity on Left) */}
-          <div className="absolute top-0 left-0 p-6 lg:p-8 pr-16 pb-16 z-[9999] group/back cursor-auto" onClick={(e) => e.stopPropagation()}>
+          {/* Main Lightbox Image */}
+          <motion.div 
+            key={selectedIndex}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="absolute inset-0 p-0 md:p-12 flex items-center justify-center pointer-events-none z-[10]"
+          >
+            <img 
+              src={images[selectedIndex]} 
+              alt={`${title} Preview`} 
+              className="max-w-full max-h-full object-contain shadow-2xl transition-all duration-300 ease-out pointer-events-auto"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+
+          {/* Close Button */}
+          <div className="absolute top-4 left-4 lg:top-8 lg:left-8 z-[50]">
             <button 
-              className="p-2 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-all duration-300 opacity-0 group-hover/back:opacity-100"
+              className="p-3 bg-background/60 hover:bg-background/90 text-foreground rounded-full backdrop-blur-md shadow-lg transition-all duration-300"
               onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
             >
               <X className="w-6 h-6" />
@@ -100,13 +117,13 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
           {images.length > 1 && (
             <>
               <button
-                className="absolute left-4 lg:left-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
+                className="absolute left-2 lg:left-8 top-1/2 -translate-y-1/2 p-3 bg-background/60 hover:bg-background/90 text-foreground rounded-full backdrop-blur-md shadow-lg transition-colors z-[50]"
                 onClick={showPrev}
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
-                className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 p-3 bg-foreground/10 hover:bg-foreground/20 text-foreground rounded-full transition-colors z-[9999]"
+                className="absolute right-2 lg:right-8 top-1/2 -translate-y-1/2 p-3 bg-background/60 hover:bg-background/90 text-foreground rounded-full backdrop-blur-md shadow-lg transition-colors z-[50]"
                 onClick={showNext}
               >
                 <ChevronRight className="w-6 h-6" />
@@ -114,31 +131,14 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
             </>
           )}
 
-          {/* Main Lightbox Image */}
-          <motion.div 
-            key={selectedIndex}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="absolute inset-0 p-4 md:p-12 flex items-center justify-center pointer-events-none"
-          >
-            <img 
-              src={images[selectedIndex]} 
-              alt={`${title} Preview`} 
-              className="max-w-full max-h-full object-contain shadow-2xl transition-all duration-300 ease-out pointer-events-auto"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </motion.div>
-
           {/* Indicator Dots */}
           {images.length > 1 && (
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-[9999]">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-[50]">
               {images.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={(e) => { e.stopPropagation(); openLightbox(idx); }}
-                  className={`w-2 h-2 rounded-full transition-all ${idx === selectedIndex ? 'bg-foreground w-6' : 'bg-foreground/30 hover:bg-foreground/50'}`}
+                  className={`w-2 h-2 rounded-full transition-all ${idx === selectedIndex ? 'bg-foreground w-6 shadow-md' : 'bg-foreground/30 hover:bg-foreground/50'}`}
                 />
               ))}
             </div>
