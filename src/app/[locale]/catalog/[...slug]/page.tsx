@@ -67,12 +67,14 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
   let targetCategory = category;
   let targetProduct = null;
   let backHref = '/catalog';
+  let backText = locale === 'he' ? 'חזרה לקטלוג' : 'Back to Catalog';
 
   if (decodedSlug.length === 1) {
     if (category.children && category.children.length > 0) {
       renderType = 'collection-gallery';
     } else {
       renderType = 'product-grid';
+      backHref = '/catalog';
     }
   } else if (decodedSlug.length === 2) {
     // It's either a Collection (child category) OR a Product
@@ -83,24 +85,27 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
       targetCategory = childCategory;
       renderType = 'product-grid';
       backHref = `/catalog/${generateSlug(catName)}`;
+      backText = locale === 'he' ? 'חזרה לקטלוג' : 'Back to Catalog';
     } else {
       const product = await findProductByName(childCatName);
       if (product) {
         targetProduct = product;
         renderType = 'product-single';
         backHref = `/catalog/${generateSlug(catName)}`;
+        backText = locale === 'he' ? 'חזרה לקולקציה' : 'Back to Collection';
       } else {
         notFound();
       }
     }
-  } else if (decodedSlug.length === 3) {
+  } else if (decodedSlug.length >= 3) {
     // It's [category, collection, product]
-    const prodName = decodedSlug[2];
+    const prodName = decodedSlug.slice(2).join('/');
     const product = await findProductByName(prodName);
     if (product) {
       targetProduct = product;
       renderType = 'product-single';
       backHref = `/catalog/${generateSlug(catName)}/${generateSlug(decodedSlug[1])}`;
+      backText = locale === 'he' ? 'חזרה לקולקציה' : 'Back to Collection';
     } else {
       notFound();
     }
@@ -148,7 +153,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
               className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors mb-12 ${locale === 'he' ? 'ml-auto flex-row-reverse' : ''}`}
             >
               {locale === 'he' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-              {t('back')}
+              {backText}
             </Link>
           </div>
 
@@ -214,7 +219,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
           className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors mb-12 ${locale === 'he' ? 'ml-auto flex-row-reverse' : ''}`}
         >
           {locale === 'he' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-          {t('back')}
+          {backText}
         </Link>
 
         <div className={`flex flex-col lg:flex-row gap-16 lg:gap-24 ${locale === 'he' ? 'lg:flex-row-reverse text-right' : 'text-left'}`}>
