@@ -108,7 +108,7 @@ export default async function LocaleLayout(
   };
 
   return (
-    <html lang={locale} dir="ltr">
+    <html lang={locale} dir="ltr" className="dark">
       <head>
         {typeDisableScrollbar && (
           <style>{`

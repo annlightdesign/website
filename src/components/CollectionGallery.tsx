@@ -36,7 +36,7 @@ export default function CollectionGallery({ collections, locale, categoryName, p
 
   // Render gallery
   return (
-    <div className="w-full bg-[#FAFAFA] dark:bg-[#0A0A0A] text-foreground pb-32 overflow-x-hidden">
+    <div className="w-full bg-background text-foreground pb-32 overflow-x-hidden">
       <style>{`
         ::-webkit-scrollbar { display: none; }
         * { -ms-overflow-style: none; scrollbar-width: none; }
