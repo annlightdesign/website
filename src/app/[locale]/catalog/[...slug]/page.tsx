@@ -85,7 +85,7 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
       targetCategory = childCategory;
       renderType = 'product-grid';
       backHref = `/catalog/${generateSlug(catName)}`;
-      backText = locale === 'he' ? 'חזרה לקטלוג' : 'Back to Catalog';
+      backText = locale === 'he' ? 'חזרה לקולקציה' : 'Back to Collection';
     } else {
       const product = await findProductByName(childCatName);
       if (product) {
@@ -147,14 +147,23 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
           * { -ms-overflow-style: none; scrollbar-width: none; }
         `}</style>
         <div className="w-full pt-32 pb-12 px-8 md:px-16 flex flex-col items-center text-center relative">
-          <div className="w-full max-w-[1800px] mx-auto flex">
+          <div className={`flex flex-col sm:flex-row gap-4 sm:gap-8 w-full max-w-[1800px] mx-auto mb-12 ${locale === 'he' ? 'sm:justify-start sm:flex-row-reverse' : ''}`}>
             <Link 
-              href={backHref} 
-              className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors mb-12 ${locale === 'he' ? 'ml-auto flex-row-reverse' : ''}`}
+              href="/catalog" 
+              className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors ${locale === 'he' ? 'ml-auto flex-row-reverse sm:ml-0' : ''}`}
             >
               {locale === 'he' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-              {backText}
+              {locale === 'he' ? 'חזרה לקטלוג' : 'Back to Catalog'}
             </Link>
+            {backHref !== '/catalog' && (
+              <Link 
+                href={backHref} 
+                className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors ${locale === 'he' ? 'ml-auto flex-row-reverse sm:ml-0' : ''}`}
+              >
+                {locale === 'he' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+                {backText}
+              </Link>
+            )}
           </div>
 
           <h1 className="text-3xl md:text-5xl uppercase tracking-[0.3em] font-light text-foreground mb-10 mt-10">
@@ -214,13 +223,24 @@ export default async function DynamicCatalogPage(props: { params: Promise<{ loca
 
     return (
       <main className={`container mx-auto px-6 py-12 pt-32 min-h-screen ${locale === 'he' ? assistantFont.className : ''}`}>
-        <Link 
-          href={backHref} 
-          className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors mb-12 ${locale === 'he' ? 'ml-auto flex-row-reverse' : ''}`}
-        >
-          {locale === 'he' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-          {backText}
-        </Link>
+        <div className={`flex flex-col sm:flex-row gap-4 sm:gap-8 mb-12 ${locale === 'he' ? 'sm:justify-start sm:flex-row-reverse' : ''}`}>
+          <Link 
+            href="/catalog" 
+            className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors ${locale === 'he' ? 'ml-auto flex-row-reverse sm:ml-0' : ''}`}
+          >
+            {locale === 'he' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+            {locale === 'he' ? 'חזרה לקטלוג' : 'Back to Catalog'}
+          </Link>
+          {backHref !== '/catalog' && (
+            <Link 
+              href={backHref} 
+              className={`flex items-center gap-2 hover:text-foreground text-muted-foreground w-fit uppercase text-xs tracking-widest font-semibold transition-colors ${locale === 'he' ? 'ml-auto flex-row-reverse sm:ml-0' : ''}`}
+            >
+              {locale === 'he' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+              {backText}
+            </Link>
+          )}
+        </div>
 
         <div className={`flex flex-col lg:flex-row gap-16 lg:gap-24 ${locale === 'he' ? 'lg:flex-row-reverse text-right' : 'text-left'}`}>
           <div className="flex-1 w-full flex flex-col gap-4">
