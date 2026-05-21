@@ -105,7 +105,7 @@ export default function ProjectClientView({
               alt="Enlarged view"
               onContextMenu={(e) => e.preventDefault()}
               draggable={false}
-              className="max-w-full max-h-full object-contain shadow-2xl transition-all duration-300 ease-out pointer-events-auto select-none"
+              className="w-full h-full object-cover shadow-2xl transition-all duration-300 ease-out pointer-events-auto select-none"
               onClick={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
             />

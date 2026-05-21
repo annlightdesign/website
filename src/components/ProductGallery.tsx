@@ -98,7 +98,7 @@ export default function ProductGallery({ images, title, locale }: ProductGallery
             <img 
               src={images[selectedIndex]} 
               alt={`${title} Preview`} 
-              className="max-w-full max-h-full object-contain shadow-2xl transition-all duration-300 ease-out pointer-events-auto"
+              className="w-full h-full object-cover shadow-2xl transition-all duration-300 ease-out pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             />
           </motion.div>

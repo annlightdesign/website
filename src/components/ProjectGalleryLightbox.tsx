@@ -43,7 +43,7 @@ export default function ProjectGalleryLightbox({ images }: { images: string[] })
           <img 
             src={activeImage} 
             alt="Enlarged view" 
-            className="max-w-full max-h-full object-contain shadow-2xl"
+            className="w-full h-full object-cover shadow-2xl"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image itself
           />
         </div>
